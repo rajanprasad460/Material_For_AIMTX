@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Manual derivation of training a sigmoid neuron for the OR gate using forward propagation, squared-error loss, backpropagation, and gradient descent." />
-  <title>Manual OR Gate Training | Neural Network Derivation</title>
+  <title>Course Material for AI for Mechatronics</title>
   <link rel="canonical" href="https://aimtx.rajan-prasad.com.np/" />
   <meta property="og:url" content="https://aimtx.rajan-prasad.com.np/" />
 
@@ -552,6 +552,128 @@
       .xor-predictions { grid-template-columns: 1fr; }
     }
 
+
+    /* CNN lesson additions */
+    .lesson-divider.cnn-divider {
+      background: linear-gradient(135deg, #7a3d0e, #f08a24);
+    }
+
+    .code-label {
+      display: inline-block;
+      font-size: .76rem;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--primary-dark);
+      background: var(--surface-soft);
+      padding: 4px 11px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+    }
+
+    .code-card {
+      background: #0f1626;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 20px;
+      margin: 6px 0 18px;
+      overflow-x: auto;
+      box-shadow: var(--shadow);
+    }
+
+    .code-card pre {
+      margin: 0;
+      font-family: "Fira Code", "SFMono-Regular", Consolas, Menlo, monospace;
+      font-size: 13.3px;
+      line-height: 1.62;
+      color: #d7e3ff;
+      white-space: pre;
+    }
+
+    .code-card .cm { color: #7f93bd; font-style: italic; }
+
+    .fig-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .fig-grid .diagram-figure { margin: 0; }
+
+    .stage-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .95rem;
+    }
+
+    .stage-table th,
+    .stage-table td {
+      padding: 11px 9px;
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+
+    .stage-table th {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .95rem;
+    }
+
+    .summary-table th,
+    .summary-table td {
+      padding: 11px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .summary-table th {
+      background: var(--surface-soft);
+      color: var(--primary-dark);
+      text-transform: uppercase;
+      font-size: .78rem;
+      letter-spacing: .04em;
+    }
+
+    .question-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      counter-reset: q;
+    }
+
+    .question-list li {
+      counter-increment: q;
+      display: flex;
+      gap: 14px;
+      padding: 13px 0;
+      border-bottom: 1px dashed var(--border);
+    }
+
+    .question-list li:last-child { border-bottom: 0; }
+
+    .question-list li::before {
+      content: counter(q);
+      flex: 0 0 auto;
+      width: 26px;
+      height: 26px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 800;
+      font-size: .85rem;
+    }
+
+    @media (max-width: 820px) {
+      .fig-grid { grid-template-columns: 1fr; }
+    }
+
   </style>
 </head>
 
@@ -567,6 +689,7 @@
         <a href="https://aimtx.rajan-prasad.com.np/" aria-current="page">AI for Mechatronics</a>
         <a href="#or-gate">OR Gate</a>
         <a href="#xor-gate">XOR Gate</a>
+        <a href="#cnn-gate">CNN</a>
       </div>
     </div>
   </nav>
@@ -1413,6 +1536,524 @@
         </div>
         <p id="xorStatus" class="note" style="margin-top:18px;">Ready to train.</p>
         <div id="xorPredictions" class="xor-predictions"></div>
+      </div>
+    </section>
+
+    <div class="lesson-divider cnn-divider" id="cnn-gate">
+      <h2>Convolutional Neural Networks: Fundamentals</h2>
+      <p>
+        A from-scratch walkthrough of the CNN <strong>forward pass</strong> — built entirely with
+        plain Python lists and loops so every operation is transparent. We take a small image matrix
+        all the way through to a final class prediction, then repeat the pipeline on a real
+        uploaded photograph.
+      </p>
+    </div>
+
+    <section>
+      <div class="section-title">
+        <span class="section-number">C1</span>
+        <h2>Image as a matrix, and why padding is needed</h2>
+      </div>
+
+      <div class="hero-grid">
+        <div class="card">
+          <h3>A grayscale image is a matrix</h3>
+          <p>
+            Small values are dark pixels, large values are bright pixels. The 6×6 example below has a
+            bright vertical region on the right — enough contrast to see how an edge-detecting kernel
+            responds to it.
+          </p>
+          <div class="code-card">
+            <pre>image = [
+    [0, 0, 0, 10, 10, 10],
+    [0, 0, 0, 10, 10, 10],
+    [0, 0, 0, 10, 10, 10],
+    [0, 0, 0, 10, 10, 10],
+    [0, 0, 0, 10, 10, 10],
+    [0, 0, 0, 10, 10, 10]
+]</pre>
+          </div>
+        </div>
+
+        <div class="card model-box">
+          <div>
+            <h3>Why padding is required</h3>
+            <p style="margin:0;">
+              Without it, border pixels are touched by far fewer kernel positions than center
+              pixels, and the output shrinks with every convolution.
+            </p>
+            <div class="model-flow">
+              <span class="node">Image</span>
+              <span class="arrow">→</span>
+              <span class="node">Zero padding</span>
+              <span class="arrow">→</span>
+              <span class="node">Full-size output</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <span class="code-label">Zero-padding function</span>
+      <div class="code-card">
+        <pre>def zero_padding(matrix, padding=1):
+    if padding == 0:
+        return [row[:] for row in matrix]
+
+    original_columns = len(matrix[0])
+    padded_columns = original_columns + 2 * padding
+    padded_matrix = []
+
+    for _ in range(padding):
+        padded_matrix.append([0 for _ in range(padded_columns)])
+
+    for row in matrix:
+        new_row = [0] * padding + list(row) + [0] * padding
+        padded_matrix.append(new_row)
+
+    for _ in range(padding):
+        padded_matrix.append([0 for _ in range(padded_columns)])
+
+    return padded_matrix</pre>
+      </div>
+
+      <p>
+        We applied this to both the synthetic matrix and a real uploaded photograph (padding it per
+        RGB channel), and visualized the before/after with an interactive padding-width slider.
+      </p>
+
+      <div class="fig-grid">
+        <figure class="diagram-figure">
+          <img src="assets/cnn_padding_effect_demo.png" alt="6x6 synthetic image before and after zero padding" loading="lazy" />
+          <figcaption>The synthetic matrix before and after zero-padding — the bright region shifts inward as a border of zeros is added.</figcaption>
+        </figure>
+        <figure class="diagram-figure">
+          <img src="assets/cnn_rgb_channels_demo.png" alt="Red, green, and blue channels of the uploaded photograph shown separately" loading="lazy" />
+          <figcaption>A real uploaded photograph split into Red, Green, and Blue channels — each is just another matrix for the same code to operate on.</figcaption>
+        </figure>
+      </div>
+
+      <figure class="diagram-figure" style="margin-top:20px;">
+        <img src="assets/cnn_real_image_padding_demo.png" alt="A real photograph shown before and after zero padding with a slider-controlled padding width" loading="lazy" />
+        <figcaption>Zero-padding applied to a real image channel with an adjustable padding width — the same <code>zero_padding()</code> function, just a bigger matrix.</figcaption>
+      </figure>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <span class="section-number">C2</span>
+        <h2>Convolution: sliding a kernel across the image</h2>
+      </div>
+
+      <p>
+        A kernel (filter) is a small matrix that searches for a specific visual pattern. We used a
+        vertical-edge kernel and worked through one convolution calculation by hand before
+        generalizing it into a function that slides the kernel over the entire image.
+      </p>
+
+      <div class="grid-2">
+        <div class="equation-card">
+          <h3>Vertical-edge kernel</h3>
+          <div class="code-card" style="margin:8px 0 0;">
+            <pre>vertical_edge_kernel = [
+    [-1, 0, 1],
+    [-1, 0, 1],
+    [-1, 0, 1]
+]</pre>
+          </div>
+        </div>
+
+        <div class="equation-card highlight">
+          <h3>Output-size formula</h3>
+          \[ O = \left\lfloor \frac{N - F + 2P}{S} \right\rfloor + 1 \]
+          <p style="margin:0;">\(N\) input size, \(F\) kernel size, \(P\) padding, \(S\) stride.</p>
+        </div>
+      </div>
+
+      <span class="code-label">Complete convolution function</span>
+      <div class="code-card">
+        <pre>def convolution(image, kernel, p, s):
+    N, M = len(image), len(image[0])
+    frow, fcol = len(kernel), len(kernel[0])
+
+    I = math.floor((N - frow + 2 * p) / s + 1)
+    J = math.floor((M - fcol + 2 * p) / s + 1)
+
+    X = zero_padding([row[:] for row in image], p)
+    conv = [[0 for _ in range(J)] for _ in range(I)]
+
+    for i in range(I):
+        for j in range(J):
+            total = 0
+            for m in range(frow):
+                for n in range(fcol):
+                    total += X[i * s + m][j * s + n] * kernel[m][n]
+            conv[i][j] = total
+
+    return conv</pre>
+      </div>
+
+      <p>
+        We reused this function to explore two things directly: how <strong>stride</strong> changes
+        the output resolution (stride 1 vs. stride 2 on the same image), and how
+        <strong>different kernels</strong> — vertical-edge, horizontal-edge, sharpen, blur — light up
+        completely different patterns in the same input.
+      </p>
+
+      <figure class="diagram-figure">
+        <img src="assets/cnn_convolution_vertical_edge.png" alt="A real photograph and its vertical-edge feature map produced by the convolution function" loading="lazy" />
+        <figcaption>The vertical-edge kernel run through <code>convolution()</code> on a real photo — the feature map lights up wherever there's a strong left-right brightness change.</figcaption>
+      </figure>
+
+      <figure class="diagram-figure">
+        <img src="assets/cnn_kernel_comparison_grid.png" alt="The same image processed by eight different kernels: vertical edge, horizontal edge, Sobel vertical, Sobel horizontal, Laplacian, sharpen, box blur, Gaussian blur, and emboss" loading="lazy" />
+        <figcaption>The same input run through eight different kernels — edges, blurs, sharpening, and embossing all come from the same <code>convolution()</code> function, just a different 3×3 matrix of numbers.</figcaption>
+      </figure>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <span class="section-number">C3</span>
+        <h2>Activation function: ReLU</h2>
+      </div>
+
+      <p>
+        Convolution output can be negative wherever the kernel pattern is a poor match. ReLU
+        (\(\max(0, x)\)) zeroes out those negative responses and introduces the non-linearity a
+        network needs to represent more than straight lines.
+      </p>
+
+      <span class="code-label">ReLU on a sample vector</span>
+      <div class="code-card">
+        <pre>sample_values = [-8, -2, 0, 3, 10]
+
+relu_values = []
+for value in sample_values:
+    relu_values.append(value if value > 0 else 0)
+
+<span class="cm"># Before ReLU: [-8, -2, 0, 3, 10]
+# After  ReLU: [0, 0, 0, 3, 10]</span></pre>
+      </div>
+
+      <p>
+        We wrapped this into an <code>apply_activation()</code> helper and applied it element-wise
+        to full feature maps.
+      </p>
+
+      <figure class="diagram-figure">
+        <img src="assets/cnn_activation_functions_comparison.png" alt="An input channel run through convolution, then through ReLU, Leaky ReLU, Sigmoid, Tanh, and ELU for comparison" loading="lazy" />
+        <figcaption>The convolution output pushed through several activation functions side by side. ReLU (top right) is what the rest of the notebook uses — it simply switches off every negative pixel.</figcaption>
+      </figure>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <span class="section-number">C4</span>
+        <h2>Pooling: max and average</h2>
+      </div>
+
+      <p>
+        Pooling shrinks the spatial size of a feature map while keeping the strongest (max) or the
+        typical (average) response in each window — reducing computation and adding a small amount
+        of translation invariance.
+      </p>
+
+      <span class="code-label">Max pooling</span>
+      <div class="code-card">
+        <pre>def max_pooling(feature_map, pool_size=2, stride=2):
+    N, M = len(feature_map), len(feature_map[0])
+    I = (N - pool_size) // stride + 1
+    J = (M - pool_size) // stride + 1
+    pooled = [[0 for _ in range(J)] for _ in range(I)]
+
+    for i in range(I):
+        for j in range(J):
+            values = [
+                feature_map[i * stride + m][j * stride + n]
+                for m in range(pool_size) for n in range(pool_size)
+            ]
+            pooled[i][j] = max(values)
+
+    return pooled
+
+<span class="cm"># average_pooling() follows the same pattern, using
+# total / (pool_size * pool_size) instead of max(values)</span></pre>
+      </div>
+
+      <figure class="diagram-figure">
+        <img src="assets/cnn_pooling_stage_comparison.png" alt="An image channel shown through convolution, ReLU, max pooling, and average pooling stages" loading="lazy" />
+        <figcaption>Convolution → ReLU → Max Pooling → Average Pooling on the same channel. Max pooling keeps the sharpest response in each window; average pooling smooths it out.</figcaption>
+      </figure>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <span class="section-number">C5</span>
+        <h2>Complete feature-extraction block</h2>
+      </div>
+
+      <p>
+        A real CNN repeats the same block — convolve, activate, pool — several times, each block
+        operating on the output of the last. We packaged the three steps into one function and
+        stacked it twice, watching the spatial size shrink at every stage.
+      </p>
+
+      <div class="chain">
+        <div class="chain-step">
+          <strong>Convolution</strong>
+          <p style="margin:8px 0 0;">Slide a kernel, produce a feature map.</p>
+        </div>
+        <div class="chain-step">
+          <strong>ReLU</strong>
+          <p style="margin:8px 0 0;">Zero out negative responses.</p>
+        </div>
+        <div class="chain-step">
+          <strong>Max pooling</strong>
+          <p style="margin:8px 0 0;">Shrink the spatial size.</p>
+        </div>
+        <div class="chain-step">
+          <strong>Next block</strong>
+          <p style="margin:8px 0 0;">Repeat on the smaller map.</p>
+        </div>
+      </div>
+
+      <span class="code-label">feature_extraction_block()</span>
+      <div class="code-card">
+        <pre>def feature_extraction_block(input_map, kernel,
+                              convolution_padding=1, convolution_stride=2,
+                              pool_size=2, pool_stride=2):
+    convolution_output = convolution(input_map, kernel,
+                                      p=convolution_padding, s=convolution_stride)
+    activation_output = apply_activation(convolution_output, relu)
+    pooling_output = max_pooling(activation_output, pool_size, pool_stride)
+    return convolution_output, activation_output, pooling_output</pre>
+      </div>
+
+      <figure class="diagram-figure">
+        <img src="assets/cnn_two_block_feature_extraction.png" alt="A real photograph passed through two stacked feature-extraction blocks: a vertical-edge block followed by a horizontal-edge block, each shrinking the feature map further" loading="lazy" />
+        <figcaption>Two feature-extraction blocks stacked back-to-back — a vertical-edge block feeding a horizontal-edge block — with the feature map getting smaller and more abstract at every stage, just like the early layers of a real CNN.</figcaption>
+      </figure>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <span class="section-number">C6</span>
+        <h2>Flatten, dense layer, and softmax</h2>
+      </div>
+
+      <p>
+        Once the feature map is small enough, it is <strong>flattened</strong> into a single vector,
+        passed through a <strong>dense layer</strong> of randomly initialized weights, and converted
+        into probabilities with <strong>softmax</strong>.
+      </p>
+
+      <span class="code-label">Flatten and dense layer</span>
+      <div class="code-card">
+        <pre>def flatten(feature_map):
+    flat_vector = []
+    for row in feature_map:
+        for value in row:
+            flat_vector.append(value)
+    return flat_vector
+
+def dense(inputs, weights, bias):
+    outputs = []
+    for neuron in range(len(weights)):
+        total = bias[neuron]
+        for i in range(len(inputs)):
+            total += inputs[i] * weights[neuron][i]
+        outputs.append(total)
+    return outputs</pre>
+      </div>
+
+      <div class="equation-card success">
+        <h3>Softmax</h3>
+        \[ \text{softmax}(z_i) = \frac{e^{\,z_i - \max(z)}}{\sum_{k} e^{\,z_k - \max(z)}} \]
+        <p style="margin:0;">Turns raw class scores \(z_i\) into probabilities that sum to 1.</p>
+      </div>
+
+      <span class="code-label">Softmax and argmax</span>
+      <div class="code-card">
+        <pre>def softmax(scores):
+    m = max(scores)
+    exponentials = [math.exp(s - m) for s in scores]
+    total = sum(exponentials)
+    return [v / total for v in exponentials]
+
+def argmax(values):
+    max_i, max_v = 0, values[0]
+    for i in range(1, len(values)):
+        if values[i] > max_v:
+            max_i, max_v = i, values[i]
+    return max_i</pre>
+      </div>
+
+      <p>
+        <code>argmax()</code> then picks the highest-probability class as the prediction — the same
+        logic, in spirit, that sits at the output of a trained CNN classifier.
+      </p>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <span class="section-number">C7</span>
+        <h2>The complete forward pass, and a real image</h2>
+      </div>
+
+      <p>
+        Every earlier piece was combined into a single <code>cnn_forward_demo()</code> function:
+        convolution → ReLU → pooling → flatten → dense → softmax → argmax. We ran it on a
+        "Good vs. Defective" two-class example, then ran the same convolution → ReLU → pooling
+        stages on a real photo uploaded from Google Colab to see the pipeline behave on genuine
+        image data.
+      </p>
+
+      <span class="code-label">cnn_forward_demo()</span>
+      <div class="code-card">
+        <pre>def cnn_forward_demo(image, kernel, class_names):
+    conv_output  = convolution(image, kernel, p=1, s=1)
+    relu_output  = apply_activation(conv_output, relu)
+    pool_output  = max_pooling(relu_output, pool_size=2, stride=2)
+
+    flat_output  = flatten(pool_output)
+    weights, bias = generate_weights(len(flat_output), len(class_names))
+    class_scores  = dense(flat_output, weights, bias)
+
+    class_probabilities = softmax(class_scores)
+    prediction = class_names[argmax(class_probabilities)]
+    return prediction, class_probabilities</pre>
+      </div>
+
+      <div class="card" style="overflow-x:auto;">
+        <h3>Shapes through the pipeline (real uploaded photo)</h3>
+        <table class="stage-table" aria-label="Shape at each pipeline stage">
+          <thead>
+            <tr><th>Stage</th><th>Shape</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Original</td><td>128 × 128</td></tr>
+            <tr><td>Convolution (p=1, s=1)</td><td>128 × 128</td></tr>
+            <tr><td>ReLU</td><td>128 × 128</td></tr>
+            <tr><td>Max pooling (2×2, stride 2)</td><td>64 × 64</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note" style="margin-top:18px;">
+        The convolution kept the resolution unchanged (padding 1 exactly offsets a 3×3 kernel at
+        stride 1), and pooling halved it — visible proof of the output-size formula from Part C2.
+      </div>
+
+      <figure class="diagram-figure" style="margin-top:20px;">
+        <img src="assets/cnn_full_pipeline_real_image.png" alt="The full pipeline applied to a real uploaded photograph: original, after convolution, after ReLU, after max pooling" loading="lazy" />
+        <figcaption>The complete run: Original → Convolution → ReLU → Max Pooling on a real uploaded photo — the same four functions from every earlier section, chained end to end.</figcaption>
+      </figure>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <span class="section-number">C8</span>
+        <h2>Final summary</h2>
+      </div>
+
+      <div class="card" style="overflow-x:auto;">
+        <table class="summary-table" aria-label="What each CNN component does">
+          <thead>
+            <tr><th>Component</th><th>Main purpose</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Image matrix</td><td>Represents pixel values</td></tr>
+            <tr><td>Padding</td><td>Preserves boundary information and controls output size</td></tr>
+            <tr><td>Kernel</td><td>Searches for a visual pattern</td></tr>
+            <tr><td>Convolution</td><td>Produces a feature map</td></tr>
+            <tr><td>Stride</td><td>Controls kernel movement and output size</td></tr>
+            <tr><td>ReLU</td><td>Removes negative responses and introduces nonlinearity</td></tr>
+            <tr><td>Pooling</td><td>Reduces spatial size while retaining important responses</td></tr>
+            <tr><td>Flatten</td><td>Converts a feature map into a vector</td></tr>
+            <tr><td>Dense layer</td><td>Combines extracted features for classification</td></tr>
+            <tr><td>Softmax</td><td>Converts class scores into probabilities</td></tr>
+            <tr><td>Argmax</td><td>Selects the most probable class</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="equation-card success" style="text-align:center;margin-top:18px;">
+        \[ \text{Pixels} \rightarrow \text{Edges} \rightarrow \text{Features} \rightarrow \text{Class scores} \rightarrow \text{Prediction} \]
+        <p>
+          In this notebook every kernel and every dense weight was set manually or generated
+          randomly. In a trained CNN, these parameters are learned automatically from labeled data
+          via backpropagation — the same mechanism derived by hand in the OR and XOR sections above.
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <span class="section-number">C9</span>
+        <h2>Questions</h2>
+      </div>
+
+      <div class="card">
+        <ol class="question-list">
+          <li>What happens to the output size when stride is increased?</li>
+          <li>Why does padding help preserve boundary information?</li>
+          <li>Why are negative convolution responses removed by ReLU?</li>
+          <li>What information is retained by max pooling?</li>
+          <li>Why must the pooled feature map be flattened before a dense layer?</li>
+          <li>Why is the final random prediction not yet reliable?</li>
+          <li>Which parameters would be learned during CNN training?</li>
+        </ol>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <span class="section-number">C10</span>
+        <h2>Interactive Google Colab Notebook</h2>
+      </div>
+
+      <div class="card">
+        <p>
+          Every function above — padding, convolution, ReLU, pooling, flattening, the dense layer,
+          and softmax — is executable in the accompanying notebook, along with the real-image
+          upload demonstration.
+        </p>
+
+        <div class="grid-2">
+          <div class="equation-card">
+            <h3>What you will find inside</h3>
+            <ul>
+              <li>Image matrices &amp; padding</li>
+              <li>Manual and full convolution</li>
+              <li>Stride &amp; kernel comparisons</li>
+              <li>ReLU &amp; pooling</li>
+              <li>Feature-extraction blocks</li>
+              <li>Flatten → dense → softmax</li>
+              <li>Real-image demonstration</li>
+            </ul>
+          </div>
+
+          <div class="equation-card success">
+            <h3>Launch Google Colab</h3>
+            <p>Click the button below to open the notebook directly in Google Colab.</p>
+            <p style="margin-top:20px;text-align:center;">
+              <a
+                href="https://colab.research.google.com/drive/1dabIENYmsfdQMD_gj2f_3nQqzXPCL_W7?usp=sharing"
+                target="_blank"
+                style="
+                  display:inline-block;
+                  padding:14px 24px;
+                  background:#F9AB00;
+                  color:#ffffff;
+                  text-decoration:none;
+                  border-radius:10px;
+                  font-weight:700;
+                  font-size:16px;
+                ">
+                🚀 Open in Google Colab
+              </a>
+            </p>
+          </div>
+        </div>
       </div>
     </section>
 
