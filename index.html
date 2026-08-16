@@ -805,29 +805,872 @@
       .fig-grid { grid-template-columns: 1fr; }
     }
 
+    /* ===== Student-first course portal redesign ===== */
+    :root {
+      --bg: #f3f6fb;
+      --surface: #ffffff;
+      --surface-soft: #eef3ff;
+      --text: #12213d;
+      --muted: #5f6f89;
+      --primary: #3157d5;
+      --primary-dark: #17368f;
+      --accent: #e97532;
+      --success: #087d65;
+      --border: #dce4f0;
+      --shadow: 0 18px 55px rgba(23, 54, 143, 0.10);
+      --shadow-soft: 0 8px 28px rgba(18, 33, 61, 0.07);
+      --radius: 20px;
+      --nav-height: 72px;
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 7% 5%, rgba(49, 87, 213, .08), transparent 24rem),
+        linear-gradient(180deg, #f8faff 0%, var(--bg) 42rem);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0 0 auto;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), #6b4ed9, var(--accent));
+      transform-origin: left;
+      transform: scaleX(var(--scroll-progress, 0));
+      z-index: 1200;
+    }
+
+    .skip-link {
+      position: fixed;
+      top: 8px;
+      left: 12px;
+      z-index: 2000;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: #fff;
+      color: var(--primary-dark);
+      font-weight: 800;
+      transform: translateY(-140%);
+    }
+
+    .skip-link:focus { transform: translateY(0); }
+
+    .site-nav {
+      min-height: var(--nav-height);
+      background: rgba(10, 23, 52, .96);
+      box-shadow: 0 8px 26px rgba(7, 18, 42, .18);
+    }
+
+    .site-nav-inner { min-height: var(--nav-height); }
+
+    .brand-lockup {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-width: max-content;
+    }
+
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border-radius: 13px;
+      background: linear-gradient(145deg, #7691ff, #3157d5);
+      color: #fff;
+      font-weight: 900;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.35);
+    }
+
+    .site-brand { display: grid; line-height: 1.1; }
+    .site-brand small {
+      margin-top: 4px;
+      color: #9eb0d2;
+      font-size: .72rem;
+      font-weight: 650;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+
+    .nav-toggle {
+      display: none;
+      border: 1px solid rgba(255,255,255,.22);
+      border-radius: 10px;
+      padding: 9px 12px;
+      background: transparent;
+      color: #fff;
+      font: inherit;
+      font-weight: 750;
+      cursor: pointer;
+    }
+
+    .site-links a { font-size: .88rem; }
+
+    .course-hero {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(64px, 9vw, 112px) 0 72px;
+      color: #fff;
+      background:
+        radial-gradient(circle at 82% 24%, rgba(120, 145, 255, .42), transparent 22rem),
+        radial-gradient(circle at 76% 88%, rgba(233, 117, 50, .26), transparent 20rem),
+        linear-gradient(128deg, #091a3c 0%, #17368f 58%, #3157d5 100%);
+    }
+
+    .course-hero::after {
+      content: "";
+      position: absolute;
+      width: 360px;
+      height: 360px;
+      right: -120px;
+      top: -150px;
+      border: 54px solid rgba(255,255,255,.06);
+      border-radius: 50%;
+    }
+
+    .hero-layout {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(300px, .65fr);
+      gap: 56px;
+      align-items: center;
+    }
+
+    .course-hero .eyebrow {
+      background: rgba(255,255,255,.13);
+      color: #dce6ff;
+      border: 1px solid rgba(255,255,255,.16);
+    }
+
+    .course-hero h1 {
+      max-width: 800px;
+      margin: 20px 0;
+      color: #fff;
+      font-size: clamp(2.55rem, 6vw, 5.15rem);
+    }
+
+    .course-hero .lead {
+      max-width: 730px;
+      margin: 0;
+      color: #d8e2f7;
+      font-size: clamp(1.04rem, 2vw, 1.24rem);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .hero-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 12px 18px;
+      border: 1px solid rgba(255,255,255,.3);
+      border-radius: 12px;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 800;
+      transition: transform .2s ease, background .2s ease;
+    }
+
+    .hero-button.primary {
+      border-color: #fff;
+      background: #fff;
+      color: var(--primary-dark);
+    }
+
+    .hero-button:hover { transform: translateY(-2px); }
+    .hero-button:not(.primary):hover { background: rgba(255,255,255,.1); }
+
+    .course-summary {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      padding: 18px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 22px;
+      background: rgba(255,255,255,.10);
+      backdrop-filter: blur(12px);
+    }
+
+    .summary-item {
+      min-height: 112px;
+      padding: 17px;
+      border-radius: 15px;
+      background: rgba(7, 20, 49, .27);
+    }
+
+    .summary-item strong {
+      display: block;
+      font-size: 1.7rem;
+      line-height: 1;
+    }
+
+    .summary-item span {
+      display: block;
+      margin-top: 9px;
+      color: #cad7f1;
+      font-size: .84rem;
+    }
+
+    .pathway {
+      position: relative;
+      z-index: 3;
+      margin-top: -32px;
+      padding-bottom: 28px;
+    }
+
+    .pathway-panel {
+      padding: 26px;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      background: rgba(255,255,255,.96);
+      box-shadow: var(--shadow);
+    }
+
+    .pathway-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 22px;
+      margin-bottom: 20px;
+    }
+
+    .pathway-heading h2 { margin-top: 7px; }
+    .pathway-heading p { max-width: 610px; margin: 0; color: var(--muted); }
+
+    .path-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 13px;
+    }
+
+    .path-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      min-height: 205px;
+      padding: 19px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: #f9fbff;
+      color: inherit;
+      text-decoration: none;
+      transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+    }
+
+    .path-card:hover {
+      transform: translateY(-4px);
+      border-color: #aab9e9;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .path-step {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      background: var(--surface-soft);
+      color: var(--primary-dark);
+      font-weight: 900;
+    }
+
+    .path-card h3 { margin: 15px 0 7px; }
+    .path-card p { margin: 0 0 18px; color: var(--muted); font-size: .91rem; }
+    .path-card .path-action { margin-top: auto; color: var(--primary); font-weight: 800; font-size: .88rem; }
+
+    .unit-nav {
+      position: sticky;
+      top: var(--nav-height);
+      z-index: 900;
+      border-bottom: 1px solid var(--border);
+      background: rgba(248,250,255,.94);
+      backdrop-filter: blur(14px);
+    }
+
+    .unit-nav-inner {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 10px 0;
+      scrollbar-width: none;
+    }
+
+    .unit-nav-inner::-webkit-scrollbar { display: none; }
+    .unit-nav a {
+      flex: 0 0 auto;
+      padding: 8px 12px;
+      border-radius: 999px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: .84rem;
+      font-weight: 800;
+    }
+
+    .unit-nav a:hover,
+    .unit-nav a.active { background: var(--primary); color: #fff; }
+
+    .course-main { padding-top: 42px; }
+    .course-main > section,
+    .course-main > header,
+    .course-main > .lesson-divider { scroll-margin-top: 142px; }
+
+    .slides-section {
+      padding: 30px;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      background: #fff;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .slide-card {
+      min-height: 250px;
+      box-shadow: none;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .slide-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-soft); }
+
+    .hero#or-gate {
+      margin: 72px 0 42px;
+      padding: 42px;
+      border: 1px solid #cbd7f5;
+      border-radius: 26px;
+      background:
+        linear-gradient(135deg, rgba(49,87,213,.10), rgba(255,255,255,.96) 56%),
+        #fff;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .hero#or-gate > .container { width: 100%; }
+    .hero#or-gate h1 { font-size: clamp(2rem, 5vw, 3.45rem); color: var(--text); }
+    .hero#or-gate p { color: var(--muted); }
+
+    .lesson-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin: 18px 0 4px;
+    }
+
+    .lesson-meta span {
+      padding: 7px 10px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--muted);
+      font-size: .8rem;
+      font-weight: 750;
+    }
+
+    .lesson-divider {
+      position: relative;
+      overflow: hidden;
+      margin-top: 88px;
+      padding: 40px;
+      border: 0;
+      border-radius: 25px;
+      background: linear-gradient(128deg, #10275a, #3157d5);
+    }
+
+    .lesson-divider::after {
+      content: "";
+      position: absolute;
+      right: -65px;
+      bottom: -110px;
+      width: 260px;
+      height: 260px;
+      border: 38px solid rgba(255,255,255,.08);
+      border-radius: 50%;
+    }
+
+    .lesson-kicker {
+      position: relative;
+      z-index: 1;
+      display: inline-block;
+      margin-bottom: 10px;
+      color: #cbd7ff;
+      font-size: .77rem;
+      font-weight: 900;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+
+    .lesson-divider h2,
+    .lesson-divider p { position: relative; z-index: 1; max-width: 840px; }
+    .lesson-divider h2 { font-size: clamp(1.75rem, 4vw, 2.65rem); }
+    .cnn-divider { background: linear-gradient(128deg, #103a52, #087d65); }
+    .tl-divider { background: linear-gradient(128deg, #3f245d, #7b4fc6); }
+
+    .section-title { padding-top: 8px; }
+    .section-number { border-radius: 12px; box-shadow: 0 6px 14px rgba(49,87,213,.18); }
+    .equation-card, .card, .diagram-figure, .code-card { box-shadow: var(--shadow-soft); }
+
+    .portal-footer {
+      margin-top: 32px;
+      padding: 42px 0 50px;
+      background: #0b1732;
+      color: #becae1;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: center;
+      text-align: left;
+    }
+
+    .footer-grid p { margin: 5px 0; }
+    .footer-grid a { color: #fff; font-weight: 750; }
+
+    @media (max-width: 980px) {
+      .hero-layout { grid-template-columns: 1fr; }
+      .course-summary { max-width: 620px; }
+      .path-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .site-links { gap: 3px; }
+    }
+
+    @media (max-width: 760px) {
+      :root { --nav-height: 68px; }
+      .site-nav-inner { flex-direction: row; align-items: center; padding: 10px 0; }
+      .nav-toggle { display: inline-flex; }
+      .site-links {
+        position: absolute;
+        inset: calc(100% + 1px) 16px auto;
+        display: none;
+        align-items: stretch;
+        padding: 10px;
+        border: 1px solid rgba(255,255,255,.14);
+        border-radius: 14px;
+        background: #0b1732;
+        box-shadow: 0 20px 45px rgba(0,0,0,.25);
+      }
+      .site-links.open { display: grid; }
+      .site-links a { padding: 11px 12px; }
+      .course-hero { padding-top: 58px; }
+      .course-summary { grid-template-columns: repeat(2, 1fr); }
+      .pathway-heading { align-items: flex-start; flex-direction: column; }
+      .hero#or-gate, .lesson-divider, .slides-section { padding: 24px; }
+      .footer-grid { grid-template-columns: 1fr; text-align: center; }
+    }
+
+    @media (max-width: 560px) {
+      .path-grid { grid-template-columns: 1fr; }
+      .course-summary { grid-template-columns: 1fr 1fr; padding: 12px; }
+      .summary-item { min-height: 96px; padding: 14px; }
+      .summary-item strong { font-size: 1.35rem; }
+      .pathway-panel { padding: 20px; }
+      .hero-actions { display: grid; }
+      .hero-button { width: 100%; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+    }
+
+    /* ===== Learning-platform refinement ===== */
+    :root {
+      --bg: #f7f8fa;
+      --surface-soft: #edf4ff;
+      --text: #20242c;
+      --muted: #5f6368;
+      --primary: #1865f2;
+      --primary-dark: #0b3d91;
+      --accent: #d45b22;
+      --success: #087f5b;
+      --border: #d8dce3;
+      --shadow: 0 10px 30px rgba(32, 36, 44, .07);
+      --shadow-soft: 0 4px 16px rgba(32, 36, 44, .06);
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .site-nav {
+      background: rgba(255,255,255,.98);
+      border-bottom: 1px solid var(--border);
+      box-shadow: none;
+    }
+
+    .brand-mark {
+      background: #14bf96;
+      color: #083c32;
+      box-shadow: none;
+    }
+
+    .site-brand { color: #172b4d; }
+    .site-brand small { color: #6c7480; }
+    .site-links a { color: #344054; }
+    .site-links a:hover,
+    .site-links a[aria-current="page"] { color: var(--primary-dark); background: #edf4ff; }
+    .nav-toggle { color: var(--primary-dark); border-color: var(--border); }
+
+    .course-hero {
+      padding: clamp(56px, 7vw, 88px) 0 66px;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 88% 8%, rgba(20,191,150,.18), transparent 18rem),
+        linear-gradient(180deg, #ffffff 0%, #f1f7ff 100%);
+      border-bottom: 1px solid #dbe6f5;
+    }
+
+    .course-hero::after {
+      width: 300px;
+      height: 300px;
+      right: -110px;
+      top: -165px;
+      border-color: rgba(24,101,242,.07);
+    }
+
+    .course-hero .eyebrow {
+      color: #0b5c4a;
+      background: #dff8f1;
+      border-color: #bdeadd;
+    }
+
+    .course-hero h1 {
+      max-width: 760px;
+      color: #172b4d;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.5rem, 5.6vw, 4.8rem);
+      letter-spacing: -.035em;
+    }
+
+    .course-hero .lead { color: #4d5a6d; }
+    .hero-button { border-color: #9fb5d4; color: var(--primary-dark); }
+    .hero-button.primary { border-color: var(--primary); background: var(--primary); color: #fff; }
+    .hero-button:not(.primary):hover { background: #fff; }
+
+    .course-summary {
+      display: block;
+      padding: 0;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: #fff;
+      box-shadow: var(--shadow);
+      color: var(--text);
+      backdrop-filter: none;
+    }
+
+    .mastery-card { padding: 25px; }
+    .mastery-card h2 { margin: 5px 0 8px; font-size: 1.3rem; }
+    .mastery-card > p { margin: 0; color: var(--muted); font-size: .9rem; }
+    .mastery-row { display: flex; gap: 19px; align-items: center; margin: 22px 0; }
+    .mastery-ring {
+      --mastery: 0deg;
+      width: 88px;
+      height: 88px;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: conic-gradient(#14bf96 var(--mastery), #e7ebf0 0);
+      position: relative;
+    }
+    .mastery-ring::before {
+      content: "";
+      position: absolute;
+      width: 66px;
+      height: 66px;
+      border-radius: 50%;
+      background: #fff;
+    }
+    .mastery-ring strong { position: relative; font-size: 1rem; color: #172b4d; }
+    .mastery-copy strong { display: block; color: #172b4d; font-size: 1.08rem; }
+    .mastery-copy span { display: block; margin-top: 5px; color: var(--muted); font-size: .84rem; }
+    .mastery-progress {
+      height: 7px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #e7ebf0;
+    }
+    .mastery-progress span {
+      display: block;
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: #14bf96;
+      transition: width .3s ease;
+    }
+
+    .pathway { margin-top: -28px; }
+    .pathway-panel { padding: 30px; border-radius: 18px; box-shadow: var(--shadow); }
+    .pathway-heading { align-items: center; }
+    .pathway-heading h2 {
+      color: #172b4d;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+    }
+    .path-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; }
+    .path-card {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0 15px;
+      min-height: 0;
+      padding: 20px;
+      border-radius: 12px;
+      background: #fff;
+      text-decoration: none;
+    }
+    .path-card:hover { transform: none; border-color: #8db2ef; box-shadow: 0 0 0 2px rgba(24,101,242,.10); }
+    .path-step { grid-row: 1 / span 3; border-radius: 50%; background: #e8f1ff; }
+    .path-card h3 { margin: 1px 0 5px; }
+    .path-card p { margin-bottom: 13px; }
+    .path-controls { display: flex; flex-wrap: wrap; gap: 9px; align-items: center; }
+    .path-action {
+      display: inline-flex;
+      padding: 8px 12px;
+      border-radius: 7px;
+      background: var(--primary);
+      color: #fff !important;
+      text-decoration: none;
+      font-size: .84rem !important;
+    }
+    .complete-toggle {
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      background: #fff;
+      color: #4c5564;
+      font: inherit;
+      font-size: .8rem;
+      font-weight: 750;
+      cursor: pointer;
+    }
+    .path-card.completed { border-color: #83d8c0; background: #f4fcf9; }
+    .path-card.completed .path-step { background: #14bf96; color: #083c32; }
+    .path-card.completed .complete-toggle { color: #087f5b; border-color: #83d8c0; }
+
+    .unit-nav { display: none; }
+    .course-main { width: min(1240px, calc(100% - 32px)); padding-top: 28px; }
+    .learning-shell {
+      display: grid;
+      grid-template-columns: 235px minmax(0, 1fr);
+      gap: 32px;
+      align-items: start;
+    }
+    .course-sidebar {
+      position: sticky;
+      top: calc(var(--nav-height) + 22px);
+      padding: 18px 0;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: var(--shadow-soft);
+    }
+    .sidebar-title { padding: 0 18px 14px; border-bottom: 1px solid var(--border); }
+    .sidebar-title small { color: var(--muted); font-weight: 750; }
+    .sidebar-title strong { display: block; margin-top: 4px; color: #172b4d; }
+    .outline-list { display: grid; padding: 10px 8px 0; }
+    .outline-list a {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      padding: 10px;
+      border-radius: 8px;
+      color: #42526a;
+      text-decoration: none;
+      font-size: .86rem;
+      font-weight: 700;
+    }
+    .outline-list a:hover,
+    .outline-list a.active { color: #0b3d91; background: #edf4ff; }
+    .outline-dot {
+      width: 23px;
+      height: 23px;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      border: 1px solid #c7d3e4;
+      border-radius: 50%;
+      font-size: .67rem;
+    }
+    .lesson-stream { min-width: 0; }
+    .slides-section { margin-top: 0; border-radius: 14px; box-shadow: var(--shadow-soft); }
+    .slide-card { border-radius: 12px; }
+
+    .hero#or-gate,
+    .lesson-divider {
+      margin-top: 55px;
+      padding: 32px;
+      border: 1px solid var(--border);
+      border-left: 7px solid var(--primary);
+      border-radius: 14px;
+      background: #fff;
+      color: var(--text);
+      box-shadow: var(--shadow-soft);
+    }
+    .hero#or-gate { border-left-color: #14bf96; }
+    .lesson-divider::after { display: none; }
+    .lesson-divider h2 { color: #172b4d; font-family: Georgia, "Times New Roman", serif; }
+    .lesson-divider p { color: var(--muted); }
+    .lesson-kicker { color: var(--primary); }
+    .cnn-divider { border-left-color: #087f5b; }
+    .cnn-divider .lesson-kicker { color: #087f5b; }
+    .tl-divider { border-left-color: #8b5cf6; }
+    .tl-divider .lesson-kicker { color: #6941c6; }
+
+    .section-title h2 { color: #172b4d; }
+    .section-number { border-radius: 50%; background: var(--primary); box-shadow: none; }
+    .equation-card, .card, .diagram-figure, .code-card { box-shadow: none; }
+
+    @media (max-width: 980px) {
+      .learning-shell { grid-template-columns: 1fr; }
+      .course-sidebar {
+        position: static;
+        overflow: hidden;
+        padding: 10px;
+      }
+      .sidebar-title { display: none; }
+      .outline-list {
+        display: flex;
+        gap: 5px;
+        overflow-x: auto;
+        padding: 0;
+        scrollbar-width: none;
+      }
+      .outline-list a { flex: 0 0 auto; }
+    }
+
+    @media (max-width: 760px) {
+      .site-links { background: #fff; border-color: var(--border); box-shadow: var(--shadow); }
+      .path-grid { grid-template-columns: 1fr; }
+      .course-hero h1 { font-size: clamp(2.3rem, 12vw, 3.7rem); }
+      .hero#or-gate, .lesson-divider, .slides-section { padding: 22px; }
+    }
+
   </style>
 </head>
 
 <body>
+  <a class="skip-link" href="#course-content">Skip to course content</a>
 
-  <nav class="site-nav" aria-label="Primary">
+  <nav class="site-nav" aria-label="Primary navigation">
     <div class="site-nav-inner">
-      <a class="site-brand" href="https://rajan-prasad.com.np/">Dr. Rajan Prasad</a>
-      <div class="site-links">
-        <a href="https://rajan-prasad.com.np/">Home</a>
-        <a href="https://aimtx.rajan-prasad.com.np/" aria-current="page">AI for Mechatronics</a>
-        <a href="#slides">Slides</a>
-        <a href="#or-gate">OR Gate</a>
-        <a href="#xor-gate">XOR Gate</a>
+      <div class="brand-lockup">
+        <span class="brand-mark" aria-hidden="true">AI</span>
+        <a class="site-brand" href="https://aimtx.rajan-prasad.com.np/">
+          AI for Mechatronics
+          <small>Student course portal</small>
+        </a>
+      </div>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-links">Menu</button>
+      <div class="site-links" id="primary-links">
+        <a href="#slides">Resources</a>
+        <a href="#learning-path">Learning Path</a>
+        <a href="#or-gate">ANN Lessons</a>
         <a href="#cnn-gate">CNN</a>
         <a href="#tl-gate">Transfer Learning</a>
+        <a href="https://rajan-prasad.com.np/">Instructor Site</a>
       </div>
     </div>
   </nav>
 
+  <header class="course-hero">
+    <div class="container hero-layout">
+      <div>
+        <span class="eyebrow">AI for Mechatronics · Course Resource Hub</span>
+        <h1>Learn AI through engineering examples.</h1>
+        <p class="lead">
+          Follow a guided path from neuron training and backpropagation to convolutional
+          networks and transfer learning for bearing-condition classification.
+        </p>
+        <div class="hero-actions">
+          <a class="hero-button primary" href="#learning-path">Start the learning path</a>
+          <a class="hero-button" href="#slides">View lecture resources</a>
+        </div>
+      </div>
+      <aside class="course-summary" aria-label="Course progress summary">
+        <div class="mastery-card">
+          <span class="eyebrow">Course mastery</span>
+          <h2>Your learning progress</h2>
+          <p>Mark units complete as you work through the course.</p>
+          <div class="mastery-row">
+            <div class="mastery-ring" id="mastery-ring"><strong id="mastery-percent">0%</strong></div>
+            <div class="mastery-copy">
+              <strong id="mastery-count">0 of 4 units</strong>
+              <span>completed on this device</span>
+            </div>
+          </div>
+          <div class="mastery-progress" aria-hidden="true"><span id="mastery-bar"></span></div>
+        </div>
+      </aside>
+    </div>
+  </header>
 
+  <section class="pathway container" id="learning-path" aria-labelledby="pathway-title">
+    <div class="pathway-panel">
+      <div class="pathway-heading">
+        <div>
+          <span class="eyebrow">Recommended sequence</span>
+          <h2 id="pathway-title">Your learning path</h2>
+        </div>
+        <p>Begin with a single neuron, add hidden-layer reasoning, then progress to image features and an industrial transfer-learning application.</p>
+      </div>
+      <div class="path-grid">
+        <article class="path-card" data-unit="or-gate">
+          <span class="path-step">01</span>
+          <h3>Single Neuron</h3>
+          <p>Train an OR gate manually and understand forward propagation, loss, and gradient updates.</p>
+          <div class="path-controls"><a class="path-action" href="#or-gate">Start lesson</a><button class="complete-toggle" type="button">Mark complete</button></div>
+        </article>
+        <article class="path-card" data-unit="xor-gate">
+          <span class="path-step">02</span>
+          <h3>Hidden Layers</h3>
+          <p>Use a 2–2–1 network to solve XOR and see why nonlinear models are required.</p>
+          <div class="path-controls"><a class="path-action" href="#xor-gate">Start lesson</a><button class="complete-toggle" type="button">Mark complete</button></div>
+        </article>
+        <article class="path-card" data-unit="cnn-gate">
+          <span class="path-step">03</span>
+          <h3>CNN Fundamentals</h3>
+          <p>Build convolution, ReLU, pooling, flattening, and classification step by step.</p>
+          <div class="path-controls"><a class="path-action" href="#cnn-gate">Start lesson</a><button class="complete-toggle" type="button">Mark complete</button></div>
+        </article>
+        <article class="path-card" data-unit="tl-gate">
+          <span class="path-step">04</span>
+          <h3>Bearing Case Study</h3>
+          <p>Apply pretrained VGG16 features and partial fine-tuning to bearing images.</p>
+          <div class="path-controls"><a class="path-action" href="#tl-gate">Start lesson</a><button class="complete-toggle" type="button">Mark complete</button></div>
+        </article>
+      </div>
+    </div>
+  </section>
 
-  <main class="container">
+  <nav class="unit-nav" aria-label="Course units">
+    <div class="container unit-nav-inner">
+      <a href="#slides" data-section="slides">Resources</a>
+      <a href="#or-gate" data-section="or-gate">OR Gate</a>
+      <a href="#xor-gate" data-section="xor-gate">XOR Gate</a>
+      <a href="#cnn-gate" data-section="cnn-gate">CNN Fundamentals</a>
+      <a href="#tl-gate" data-section="tl-gate">Transfer Learning</a>
+    </div>
+  </nav>
+
+  <main class="container course-main" id="course-content">
+    <div class="learning-shell">
+      <aside class="course-sidebar" aria-label="Course outline">
+        <div class="sidebar-title">
+          <small>Course outline</small>
+          <strong>AI for Mechatronics</strong>
+        </div>
+        <nav class="outline-list">
+          <a href="#slides" data-section="slides"><span class="outline-dot">R</span>Resources</a>
+          <a href="#or-gate" data-section="or-gate"><span class="outline-dot">1</span>Single neuron</a>
+          <a href="#xor-gate" data-section="xor-gate"><span class="outline-dot">2</span>Hidden layers</a>
+          <a href="#cnn-gate" data-section="cnn-gate"><span class="outline-dot">3</span>CNN fundamentals</a>
+          <a href="#tl-gate" data-section="tl-gate"><span class="outline-dot">4</span>Bearing project</a>
+        </nav>
+      </aside>
+      <div class="lesson-stream">
 
     <!--
       Upload or replace the following PDFs in the assets folder:
@@ -944,6 +1787,12 @@
         A complete step-by-step derivation of forward propagation, squared-error loss,
         backpropagation, and gradient-descent updates for a single sigmoid neuron.
       </p>
+
+      <div class="lesson-meta" aria-label="Lesson details">
+        <span>Foundation</span>
+        <span>Worked example</span>
+        <span>Colab practical</span>
+      </div>
 
       <div class="hero-grid">
         <div class="card">
@@ -1486,6 +2335,7 @@
 
 
     <div class="lesson-divider" id="xor-gate">
+      <span class="lesson-kicker">Learning Unit 02 · Artificial Neural Networks</span>
       <h2>Manual Training of an XOR Gate Neural Network</h2>
       <p>
         The XOR gate requires a hidden layer because its two output classes cannot be
@@ -1781,6 +2631,7 @@
     </section>
 
     <div class="lesson-divider cnn-divider" id="cnn-gate">
+      <span class="lesson-kicker">Learning Unit 03 · Computer Vision</span>
       <h2>Convolutional Neural Networks: Fundamentals</h2>
       <p>
         A from-scratch walkthrough of the CNN <strong>forward pass</strong> — built entirely with
@@ -2299,6 +3150,7 @@ def argmax(values):
     </section>
 
     <div class="lesson-divider tl-divider" id="tl-gate">
+      <span class="lesson-kicker">Learning Unit 04 · Engineering Application</span>
       <h2>Transfer Learning: VGG16 on Bearing Defect Classification</h2>
       <p>
         A real two-class computer-vision project — sorting bearing photographs into
@@ -2756,12 +3608,17 @@ stage_2_optimizer = optim.Adam([
       </div>
     </section>
 
+      </div>
+    </div>
   </main>
 
-  <footer>
-    <div class="container">
-      <p><strong>AI for Mechatronics</strong> · Dr. Rajan Prasad</p>
-      <p><a href="https://rajan-prasad.com.np/" style="color:inherit;">Return to main website</a></p>
+  <footer class="portal-footer">
+    <div class="container footer-grid">
+      <div>
+        <p><strong>AI for Mechatronics</strong></p>
+        <p>Lecture resources, guided lessons, and engineering practicals for students.</p>
+      </div>
+      <p>Prepared by Dr. Rajan Prasad · <a href="https://rajan-prasad.com.np/">Instructor website</a></p>
     </div>
   </footer>
 
@@ -2854,6 +3711,83 @@ stage_2_optimizer = optim.Adam([
         render('Parameters reset to the manual-example values.');
       });
       render('Ready to train.');
+    })();
+
+    // Responsive navigation, reading progress, and active unit state
+    (() => {
+      const toggle = document.querySelector('.nav-toggle');
+      const links = document.getElementById('primary-links');
+      toggle?.addEventListener('click', () => {
+        const open = links.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', String(open));
+      });
+      links?.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
+        links.classList.remove('open');
+        toggle?.setAttribute('aria-expanded', 'false');
+      }));
+
+      const updateProgress = () => {
+        const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = scrollable > 0 ? window.scrollY / scrollable : 0;
+        document.body.style.setProperty('--scroll-progress', Math.min(1, Math.max(0, progress)));
+      };
+      updateProgress();
+      window.addEventListener('scroll', updateProgress, { passive: true });
+
+      const unitLinks = [...document.querySelectorAll('.unit-nav a[data-section], .outline-list a[data-section]')];
+      const tracked = unitLinks
+        .map(link => document.getElementById(link.dataset.section))
+        .filter(Boolean);
+      const observer = new IntersectionObserver(entries => {
+        const visible = entries
+          .filter(entry => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (!visible) return;
+        unitLinks.forEach(link => {
+          const active = link.dataset.section === visible.target.id;
+          link.classList.toggle('active', active);
+          if (active) link.setAttribute('aria-current', 'location');
+          else link.removeAttribute('aria-current');
+        });
+      }, { rootMargin: '-28% 0px -62% 0px', threshold: [0, .1, .3] });
+      tracked.forEach(section => observer.observe(section));
+
+      const completionKey = 'aimtx-completed-units-v1';
+      const unitCards = [...document.querySelectorAll('.path-card[data-unit]')];
+      let completed = [];
+      try { completed = JSON.parse(localStorage.getItem(completionKey) || '[]'); }
+      catch { completed = []; }
+
+      const renderMastery = () => {
+        unitCards.forEach(card => {
+          const done = completed.includes(card.dataset.unit);
+          card.classList.toggle('completed', done);
+          const button = card.querySelector('.complete-toggle');
+          if (button) {
+            button.textContent = done ? 'Completed ✓' : 'Mark complete';
+            button.setAttribute('aria-pressed', String(done));
+          }
+        });
+        const percent = Math.round((completed.length / unitCards.length) * 100) || 0;
+        const ring = document.getElementById('mastery-ring');
+        if (ring) ring.style.setProperty('--mastery', `${percent * 3.6}deg`);
+        const percentLabel = document.getElementById('mastery-percent');
+        const countLabel = document.getElementById('mastery-count');
+        const bar = document.getElementById('mastery-bar');
+        if (percentLabel) percentLabel.textContent = `${percent}%`;
+        if (countLabel) countLabel.textContent = `${completed.length} of ${unitCards.length} units`;
+        if (bar) bar.style.width = `${percent}%`;
+      };
+
+      unitCards.forEach(card => card.querySelector('.complete-toggle')?.addEventListener('click', () => {
+        const unit = card.dataset.unit;
+        completed = completed.includes(unit)
+          ? completed.filter(item => item !== unit)
+          : [...completed, unit];
+        localStorage.setItem(completionKey, JSON.stringify(completed));
+        renderMastery();
+      }));
+      renderMastery();
     })();
 
   </script>
