@@ -1275,6 +1275,279 @@
       *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
     }
 
+    /* ===== Learning-platform refinement ===== */
+    :root {
+      --bg: #f7f8fa;
+      --surface-soft: #edf4ff;
+      --text: #20242c;
+      --muted: #5f6368;
+      --primary: #1865f2;
+      --primary-dark: #0b3d91;
+      --accent: #d45b22;
+      --success: #087f5b;
+      --border: #d8dce3;
+      --shadow: 0 10px 30px rgba(32, 36, 44, .07);
+      --shadow-soft: 0 4px 16px rgba(32, 36, 44, .06);
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .site-nav {
+      background: rgba(255,255,255,.98);
+      border-bottom: 1px solid var(--border);
+      box-shadow: none;
+    }
+
+    .brand-mark {
+      background: #14bf96;
+      color: #083c32;
+      box-shadow: none;
+    }
+
+    .site-brand { color: #172b4d; }
+    .site-brand small { color: #6c7480; }
+    .site-links a { color: #344054; }
+    .site-links a:hover,
+    .site-links a[aria-current="page"] { color: var(--primary-dark); background: #edf4ff; }
+    .nav-toggle { color: var(--primary-dark); border-color: var(--border); }
+
+    .course-hero {
+      padding: clamp(56px, 7vw, 88px) 0 66px;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 88% 8%, rgba(20,191,150,.18), transparent 18rem),
+        linear-gradient(180deg, #ffffff 0%, #f1f7ff 100%);
+      border-bottom: 1px solid #dbe6f5;
+    }
+
+    .course-hero::after {
+      width: 300px;
+      height: 300px;
+      right: -110px;
+      top: -165px;
+      border-color: rgba(24,101,242,.07);
+    }
+
+    .course-hero .eyebrow {
+      color: #0b5c4a;
+      background: #dff8f1;
+      border-color: #bdeadd;
+    }
+
+    .course-hero h1 {
+      max-width: 760px;
+      color: #172b4d;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.5rem, 5.6vw, 4.8rem);
+      letter-spacing: -.035em;
+    }
+
+    .course-hero .lead { color: #4d5a6d; }
+    .hero-button { border-color: #9fb5d4; color: var(--primary-dark); }
+    .hero-button.primary { border-color: var(--primary); background: var(--primary); color: #fff; }
+    .hero-button:not(.primary):hover { background: #fff; }
+
+    .course-summary {
+      display: block;
+      padding: 0;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: #fff;
+      box-shadow: var(--shadow);
+      color: var(--text);
+      backdrop-filter: none;
+    }
+
+    .mastery-card { padding: 25px; }
+    .mastery-card h2 { margin: 5px 0 8px; font-size: 1.3rem; }
+    .mastery-card > p { margin: 0; color: var(--muted); font-size: .9rem; }
+    .mastery-row { display: flex; gap: 19px; align-items: center; margin: 22px 0; }
+    .mastery-ring {
+      --mastery: 0deg;
+      width: 88px;
+      height: 88px;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: conic-gradient(#14bf96 var(--mastery), #e7ebf0 0);
+      position: relative;
+    }
+    .mastery-ring::before {
+      content: "";
+      position: absolute;
+      width: 66px;
+      height: 66px;
+      border-radius: 50%;
+      background: #fff;
+    }
+    .mastery-ring strong { position: relative; font-size: 1rem; color: #172b4d; }
+    .mastery-copy strong { display: block; color: #172b4d; font-size: 1.08rem; }
+    .mastery-copy span { display: block; margin-top: 5px; color: var(--muted); font-size: .84rem; }
+    .mastery-progress {
+      height: 7px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #e7ebf0;
+    }
+    .mastery-progress span {
+      display: block;
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: #14bf96;
+      transition: width .3s ease;
+    }
+
+    .pathway { margin-top: -28px; }
+    .pathway-panel { padding: 30px; border-radius: 18px; box-shadow: var(--shadow); }
+    .pathway-heading { align-items: center; }
+    .pathway-heading h2 {
+      color: #172b4d;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+    }
+    .path-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; }
+    .path-card {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0 15px;
+      min-height: 0;
+      padding: 20px;
+      border-radius: 12px;
+      background: #fff;
+      text-decoration: none;
+    }
+    .path-card:hover { transform: none; border-color: #8db2ef; box-shadow: 0 0 0 2px rgba(24,101,242,.10); }
+    .path-step { grid-row: 1 / span 3; border-radius: 50%; background: #e8f1ff; }
+    .path-card h3 { margin: 1px 0 5px; }
+    .path-card p { margin-bottom: 13px; }
+    .path-controls { display: flex; flex-wrap: wrap; gap: 9px; align-items: center; }
+    .path-action {
+      display: inline-flex;
+      padding: 8px 12px;
+      border-radius: 7px;
+      background: var(--primary);
+      color: #fff !important;
+      text-decoration: none;
+      font-size: .84rem !important;
+    }
+    .complete-toggle {
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      background: #fff;
+      color: #4c5564;
+      font: inherit;
+      font-size: .8rem;
+      font-weight: 750;
+      cursor: pointer;
+    }
+    .path-card.completed { border-color: #83d8c0; background: #f4fcf9; }
+    .path-card.completed .path-step { background: #14bf96; color: #083c32; }
+    .path-card.completed .complete-toggle { color: #087f5b; border-color: #83d8c0; }
+
+    .unit-nav { display: none; }
+    .course-main { width: min(1240px, calc(100% - 32px)); padding-top: 28px; }
+    .learning-shell {
+      display: grid;
+      grid-template-columns: 235px minmax(0, 1fr);
+      gap: 32px;
+      align-items: start;
+    }
+    .course-sidebar {
+      position: sticky;
+      top: calc(var(--nav-height) + 22px);
+      padding: 18px 0;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: var(--shadow-soft);
+    }
+    .sidebar-title { padding: 0 18px 14px; border-bottom: 1px solid var(--border); }
+    .sidebar-title small { color: var(--muted); font-weight: 750; }
+    .sidebar-title strong { display: block; margin-top: 4px; color: #172b4d; }
+    .outline-list { display: grid; padding: 10px 8px 0; }
+    .outline-list a {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      padding: 10px;
+      border-radius: 8px;
+      color: #42526a;
+      text-decoration: none;
+      font-size: .86rem;
+      font-weight: 700;
+    }
+    .outline-list a:hover,
+    .outline-list a.active { color: #0b3d91; background: #edf4ff; }
+    .outline-dot {
+      width: 23px;
+      height: 23px;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      border: 1px solid #c7d3e4;
+      border-radius: 50%;
+      font-size: .67rem;
+    }
+    .lesson-stream { min-width: 0; }
+    .slides-section { margin-top: 0; border-radius: 14px; box-shadow: var(--shadow-soft); }
+    .slide-card { border-radius: 12px; }
+
+    .hero#or-gate,
+    .lesson-divider {
+      margin-top: 55px;
+      padding: 32px;
+      border: 1px solid var(--border);
+      border-left: 7px solid var(--primary);
+      border-radius: 14px;
+      background: #fff;
+      color: var(--text);
+      box-shadow: var(--shadow-soft);
+    }
+    .hero#or-gate { border-left-color: #14bf96; }
+    .lesson-divider::after { display: none; }
+    .lesson-divider h2 { color: #172b4d; font-family: Georgia, "Times New Roman", serif; }
+    .lesson-divider p { color: var(--muted); }
+    .lesson-kicker { color: var(--primary); }
+    .cnn-divider { border-left-color: #087f5b; }
+    .cnn-divider .lesson-kicker { color: #087f5b; }
+    .tl-divider { border-left-color: #8b5cf6; }
+    .tl-divider .lesson-kicker { color: #6941c6; }
+
+    .section-title h2 { color: #172b4d; }
+    .section-number { border-radius: 50%; background: var(--primary); box-shadow: none; }
+    .equation-card, .card, .diagram-figure, .code-card { box-shadow: none; }
+
+    @media (max-width: 980px) {
+      .learning-shell { grid-template-columns: 1fr; }
+      .course-sidebar {
+        position: static;
+        overflow: hidden;
+        padding: 10px;
+      }
+      .sidebar-title { display: none; }
+      .outline-list {
+        display: flex;
+        gap: 5px;
+        overflow-x: auto;
+        padding: 0;
+        scrollbar-width: none;
+      }
+      .outline-list a { flex: 0 0 auto; }
+    }
+
+    @media (max-width: 760px) {
+      .site-links { background: #fff; border-color: var(--border); box-shadow: var(--shadow); }
+      .path-grid { grid-template-columns: 1fr; }
+      .course-hero h1 { font-size: clamp(2.3rem, 12vw, 3.7rem); }
+      .hero#or-gate, .lesson-divider, .slides-section { padding: 22px; }
+    }
+
   </style>
 </head>
 
@@ -1316,11 +1589,20 @@
           <a class="hero-button" href="#slides">View lecture resources</a>
         </div>
       </div>
-      <aside class="course-summary" aria-label="Course resource summary">
-        <div class="summary-item"><strong>4</strong><span>Guided learning units</span></div>
-        <div class="summary-item"><strong>3</strong><span>Lecture slide decks</span></div>
-        <div class="summary-item"><strong>3</strong><span>Colab practicals</span></div>
-        <div class="summary-item"><strong>1</strong><span>Engineering case study</span></div>
+      <aside class="course-summary" aria-label="Course progress summary">
+        <div class="mastery-card">
+          <span class="eyebrow">Course mastery</span>
+          <h2>Your learning progress</h2>
+          <p>Mark units complete as you work through the course.</p>
+          <div class="mastery-row">
+            <div class="mastery-ring" id="mastery-ring"><strong id="mastery-percent">0%</strong></div>
+            <div class="mastery-copy">
+              <strong id="mastery-count">0 of 4 units</strong>
+              <span>completed on this device</span>
+            </div>
+          </div>
+          <div class="mastery-progress" aria-hidden="true"><span id="mastery-bar"></span></div>
+        </div>
       </aside>
     </div>
   </header>
@@ -1335,30 +1617,30 @@
         <p>Begin with a single neuron, add hidden-layer reasoning, then progress to image features and an industrial transfer-learning application.</p>
       </div>
       <div class="path-grid">
-        <a class="path-card" href="#or-gate">
+        <article class="path-card" data-unit="or-gate">
           <span class="path-step">01</span>
           <h3>Single Neuron</h3>
           <p>Train an OR gate manually and understand forward propagation, loss, and gradient updates.</p>
-          <span class="path-action">Open OR lesson →</span>
-        </a>
-        <a class="path-card" href="#xor-gate">
+          <div class="path-controls"><a class="path-action" href="#or-gate">Start lesson</a><button class="complete-toggle" type="button">Mark complete</button></div>
+        </article>
+        <article class="path-card" data-unit="xor-gate">
           <span class="path-step">02</span>
           <h3>Hidden Layers</h3>
           <p>Use a 2–2–1 network to solve XOR and see why nonlinear models are required.</p>
-          <span class="path-action">Open XOR lesson →</span>
-        </a>
-        <a class="path-card" href="#cnn-gate">
+          <div class="path-controls"><a class="path-action" href="#xor-gate">Start lesson</a><button class="complete-toggle" type="button">Mark complete</button></div>
+        </article>
+        <article class="path-card" data-unit="cnn-gate">
           <span class="path-step">03</span>
           <h3>CNN Fundamentals</h3>
           <p>Build convolution, ReLU, pooling, flattening, and classification step by step.</p>
-          <span class="path-action">Open CNN lesson →</span>
-        </a>
-        <a class="path-card" href="#tl-gate">
+          <div class="path-controls"><a class="path-action" href="#cnn-gate">Start lesson</a><button class="complete-toggle" type="button">Mark complete</button></div>
+        </article>
+        <article class="path-card" data-unit="tl-gate">
           <span class="path-step">04</span>
           <h3>Bearing Case Study</h3>
           <p>Apply pretrained VGG16 features and partial fine-tuning to bearing images.</p>
-          <span class="path-action">Open project lesson →</span>
-        </a>
+          <div class="path-controls"><a class="path-action" href="#tl-gate">Start lesson</a><button class="complete-toggle" type="button">Mark complete</button></div>
+        </article>
       </div>
     </div>
   </section>
@@ -1374,6 +1656,21 @@
   </nav>
 
   <main class="container course-main" id="course-content">
+    <div class="learning-shell">
+      <aside class="course-sidebar" aria-label="Course outline">
+        <div class="sidebar-title">
+          <small>Course outline</small>
+          <strong>AI for Mechatronics</strong>
+        </div>
+        <nav class="outline-list">
+          <a href="#slides" data-section="slides"><span class="outline-dot">R</span>Resources</a>
+          <a href="#or-gate" data-section="or-gate"><span class="outline-dot">1</span>Single neuron</a>
+          <a href="#xor-gate" data-section="xor-gate"><span class="outline-dot">2</span>Hidden layers</a>
+          <a href="#cnn-gate" data-section="cnn-gate"><span class="outline-dot">3</span>CNN fundamentals</a>
+          <a href="#tl-gate" data-section="tl-gate"><span class="outline-dot">4</span>Bearing project</a>
+        </nav>
+      </aside>
+      <div class="lesson-stream">
 
     <!--
       Upload or replace the following PDFs in the assets folder:
@@ -3311,6 +3608,8 @@ stage_2_optimizer = optim.Adam([
       </div>
     </section>
 
+      </div>
+    </div>
   </main>
 
   <footer class="portal-footer">
@@ -3435,7 +3734,7 @@ stage_2_optimizer = optim.Adam([
       updateProgress();
       window.addEventListener('scroll', updateProgress, { passive: true });
 
-      const unitLinks = [...document.querySelectorAll('.unit-nav a[data-section]')];
+      const unitLinks = [...document.querySelectorAll('.unit-nav a[data-section], .outline-list a[data-section]')];
       const tracked = unitLinks
         .map(link => document.getElementById(link.dataset.section))
         .filter(Boolean);
@@ -3452,6 +3751,43 @@ stage_2_optimizer = optim.Adam([
         });
       }, { rootMargin: '-28% 0px -62% 0px', threshold: [0, .1, .3] });
       tracked.forEach(section => observer.observe(section));
+
+      const completionKey = 'aimtx-completed-units-v1';
+      const unitCards = [...document.querySelectorAll('.path-card[data-unit]')];
+      let completed = [];
+      try { completed = JSON.parse(localStorage.getItem(completionKey) || '[]'); }
+      catch { completed = []; }
+
+      const renderMastery = () => {
+        unitCards.forEach(card => {
+          const done = completed.includes(card.dataset.unit);
+          card.classList.toggle('completed', done);
+          const button = card.querySelector('.complete-toggle');
+          if (button) {
+            button.textContent = done ? 'Completed ✓' : 'Mark complete';
+            button.setAttribute('aria-pressed', String(done));
+          }
+        });
+        const percent = Math.round((completed.length / unitCards.length) * 100) || 0;
+        const ring = document.getElementById('mastery-ring');
+        if (ring) ring.style.setProperty('--mastery', `${percent * 3.6}deg`);
+        const percentLabel = document.getElementById('mastery-percent');
+        const countLabel = document.getElementById('mastery-count');
+        const bar = document.getElementById('mastery-bar');
+        if (percentLabel) percentLabel.textContent = `${percent}%`;
+        if (countLabel) countLabel.textContent = `${completed.length} of ${unitCards.length} units`;
+        if (bar) bar.style.width = `${percent}%`;
+      };
+
+      unitCards.forEach(card => card.querySelector('.complete-toggle')?.addEventListener('click', () => {
+        const unit = card.dataset.unit;
+        completed = completed.includes(unit)
+          ? completed.filter(item => item !== unit)
+          : [...completed, unit];
+        localStorage.setItem(completionKey, JSON.stringify(completed));
+        renderMastery();
+      }));
+      renderMastery();
     })();
 
   </script>
