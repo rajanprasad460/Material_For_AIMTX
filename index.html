@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Manual derivation of training a sigmoid neuron for the OR gate using forward propagation, squared-error loss, backpropagation, and gradient descent." />
-  <title>Course Material for AI for Mechatronics</title>
+  <meta name="description" content="Interactive AI for Mechatronics learning materials covering OR and XOR gates, CNNs, VGG16 transfer learning, Google Colab notebooks, and downloadable lecture slides." />
+  <title>AI for Mechatronics | Interactive Lessons and Slides</title>
   <link rel="canonical" href="https://aimtx.rajan-prasad.com.np/" />
   <meta property="og:url" content="https://aimtx.rajan-prasad.com.np/" />
 
@@ -328,6 +328,99 @@
       color: #24415f;
     }
 
+    /* Student slide library */
+    .slides-section {
+      scroll-margin-top: 92px;
+    }
+
+    .slides-intro {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 22px;
+    }
+
+    .slides-intro p {
+      max-width: 720px;
+      margin: 8px 0 0;
+      color: var(--muted);
+    }
+
+    .slides-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+    }
+
+    .slide-card {
+      display: flex;
+      flex-direction: column;
+      min-height: 230px;
+      padding: 22px;
+      border: 1px solid var(--border);
+      border-top: 5px solid var(--primary);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .slide-card:nth-child(2) { border-top-color: var(--accent); }
+    .slide-card:nth-child(3) { border-top-color: #7b61c9; }
+    .slide-card:nth-child(4) { border-top-color: var(--success); }
+    .slide-card:nth-child(5) { border-top-color: #0d8cab; }
+
+    .slide-kicker {
+      margin: 0 0 8px;
+      color: var(--primary-dark);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+    }
+
+    .slide-card h3 {
+      margin: 0 0 10px;
+      font-size: 1.18rem;
+      line-height: 1.35;
+    }
+
+    .slide-card p:not(.slide-kicker) {
+      margin: 0 0 18px;
+      color: var(--muted);
+    }
+
+    .slide-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: auto;
+    }
+
+    .slide-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 9px 13px;
+      border: 1px solid var(--primary);
+      border-radius: 9px;
+      color: var(--primary);
+      text-decoration: none;
+      font-size: .9rem;
+      font-weight: 750;
+      transition: .2s ease;
+    }
+
+    .slide-button.primary {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .slide-button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 7px 16px rgba(36, 87, 214, .16);
+    }
+
     footer {
       border-top: 1px solid var(--border);
       padding: 28px 0 42px;
@@ -340,6 +433,11 @@
       .grid-2,
       .result-row {
         grid-template-columns: 1fr;
+      }
+
+      .slides-intro {
+        align-items: flex-start;
+        flex-direction: column;
       }
 
       .chain {
@@ -558,6 +656,39 @@
       background: linear-gradient(135deg, #7a3d0e, #f08a24);
     }
 
+    /* Transfer-learning lesson additions */
+    .lesson-divider.tl-divider {
+      background: linear-gradient(135deg, #0b5a4a, #16a37e);
+    }
+
+    .metric-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 14px;
+      margin: 14px 0;
+    }
+
+    .metric-box {
+      border: 1px solid var(--border);
+      background: var(--surface-soft);
+      border-radius: 14px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .metric-box .metric-value {
+      display: block;
+      color: var(--primary-dark);
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-top: 4px;
+    }
+
+    .metric-box .metric-label {
+      font-size: .82rem;
+      color: var(--muted);
+    }
+
     .code-label {
       display: inline-block;
       font-size: .76rem;
@@ -684,15 +815,96 @@
       <a class="site-brand" href="https://rajan-prasad.com.np/">Dr. Rajan Prasad</a>
       <div class="site-links">
         <a href="https://rajan-prasad.com.np/">Home</a>
-        <a href="https://rajan-prasad.com.np/#research">Research</a>
-        <a href="https://rajan-prasad.com.np/#publications">Publications</a>
         <a href="https://aimtx.rajan-prasad.com.np/" aria-current="page">AI for Mechatronics</a>
+        <a href="#slides">Slides</a>
         <a href="#or-gate">OR Gate</a>
         <a href="#xor-gate">XOR Gate</a>
         <a href="#cnn-gate">CNN</a>
+        <a href="#tl-gate">Transfer Learning</a>
       </div>
     </div>
   </nav>
+
+
+
+  <main class="container">
+
+    <!--
+      Upload or replace the following PDFs in the assets folder:
+      module-1-ann.pdf
+      module-2-cnn.pdf
+      module-3-rnn-autoencoders.pdf
+      module-4-fuzzy-expert-systems.pdf
+      transfer-learning-bearing.pdf
+    -->
+    <section class="slides-section" id="slides">
+      <div class="slides-intro">
+        <div>
+          <span class="eyebrow">Student Resources</span>
+          <h2>Lecture Slides</h2>
+          <p>
+            Open the lecture slides in your browser or download a copy for revision.
+            Updated files will appear at the same links throughout the semester.
+          </p>
+        </div>
+      </div>
+
+
+
+
+		<div class="slides-grid">
+
+		  <article class="slide-card">
+			<p class="slide-kicker">Module 1</p>
+			<h3>Machine Learning</h3>
+			<p>Supervised learning, unsupervised learning, model training, and evaluation.</p>
+			<div class="slide-actions">
+			  <a class="slide-button primary"
+				 href="assets/ML.pdf"
+				 target="_blank"
+				 rel="noopener">Open PDF</a>
+			  <a class="slide-button"
+				 href="assets/ML.pdf"
+				 download>Download</a>
+			</div>
+		  </article>
+
+		  <article class="slide-card">
+			<p class="slide-kicker">Module 2</p>
+			<h3>Artificial Neural Networks</h3>
+			<p>Neuron models, activation functions, forward propagation, backpropagation, and training.</p>
+			<div class="slide-actions">
+			  <a class="slide-button primary"
+				 href="assets/ANN.pdf"
+				 target="_blank"
+				 rel="noopener">Open PDF</a>
+			  <a class="slide-button"
+				 href="assets/ANN.pdf"
+				 download>Download</a>
+			</div>
+		  </article>
+
+		  <article class="slide-card">
+			<p class="slide-kicker">Module 3</p>
+			<h3>Convolutional Neural Networks</h3>
+			<p>Convolution, activation, pooling, feature extraction, and image classification.</p>
+			<div class="slide-actions">
+			  <a class="slide-button primary"
+				 href="assets/CNN.pdf"
+				 target="_blank"
+				 rel="noopener">Open PDF</a>
+			  <a class="slide-button"
+				 href="assets/CNN.pdf"
+				 download>Download</a>
+			</div>
+		  </article>
+
+		</div>
+
+    </section>
+
+
+
 
   <header class="hero" id="or-gate">
     <div class="container">
@@ -744,7 +956,6 @@
     </div>
   </header>
 
-  <main class="container">
 
     <section>
       <div class="section-title">
@@ -2038,6 +2249,464 @@ def argmax(values):
             <p style="margin-top:20px;text-align:center;">
               <a
                 href="https://colab.research.google.com/drive/1dabIENYmsfdQMD_gj2f_3nQqzXPCL_W7?usp=sharing"
+                target="_blank"
+                style="
+                  display:inline-block;
+                  padding:14px 24px;
+                  background:#F9AB00;
+                  color:#ffffff;
+                  text-decoration:none;
+                  border-radius:10px;
+                  font-weight:700;
+                  font-size:16px;
+                ">
+                🚀 Open in Google Colab
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="lesson-divider tl-divider" id="tl-gate">
+      <h2>Transfer Learning: VGG16 on Bearing Defect Classification</h2>
+      <p>
+        A real two-class computer-vision project — sorting bearing photographs into
+        <code>defective</code> and <code>good</code> — built by reusing a pretrained VGG16 network
+        instead of training a CNN from scratch. Same convolution/ReLU/pooling building blocks from
+        the CNN section above; this time they come pre-trained on ImageNet.
+      </p>
+    </div>
+
+    <section>
+      <div class="section-title">
+        <span class="section-number">T1</span>
+        <h2>The problem and the dataset</h2>
+      </div>
+
+      <p>
+        The dataset is a folder of real bearing photographs split into <code>train</code>,
+        <code>val</code>, and <code>test</code>, each containing a <code>defective</code> and a
+        <code>good</code> class folder.
+      </p>
+
+      <div class="code-card">
+        <pre>bearing_dataset/
+├── train/
+│   ├── defective/
+│   └── good/
+├── val/
+│   ├── defective/
+│   └── good/
+└── test/
+    ├── defective/
+    └── good/</pre>
+      </div>
+
+      <div class="card" style="overflow-x:auto;">
+        <h3>Image counts per split</h3>
+        <table class="stage-table" aria-label="Dataset split counts">
+          <thead>
+            <tr><th>Split</th><th>Defective</th><th>Good</th><th>Total</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Train</td><td>2,193</td><td>552</td><td>2,745</td></tr>
+            <tr><td>Validation</td><td>91</td><td>22</td><td>113</td></tr>
+            <tr><td>Test</td><td>92</td><td>23</td><td>115</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note" style="margin-top:18px;">
+        The classes are imbalanced — about 4× more <code>defective</code> images than
+        <code>good</code> in training. This is corrected later with class-weighted loss rather than
+        by discarding data.
+      </div>
+
+      <figure class="diagram-figure" style="margin-top:20px;">
+        <img src="assets/tl_raw_samples.png" alt="Raw sample bearing photographs from the train split, five defective and five good" loading="lazy" />
+        <figcaption>Raw samples from the train split — defective bearings (top row) show corrosion, discoloration, or missing components; good bearings (bottom row) are clean and intact.</figcaption>
+      </figure>
+
+      <figure class="diagram-figure">
+        <img src="assets/tl_class_distribution.png" alt="Bar chart of training class distribution: about 2200 defective images versus about 550 good images" loading="lazy" />
+        <figcaption>The training class distribution — the imbalance behind the class-weighted loss used in Stage 1 and Stage 2.</figcaption>
+      </figure>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <span class="section-number">T2</span>
+        <h2>Preprocessing and data augmentation</h2>
+      </div>
+
+      <p>
+        Training images get moderate random augmentation so the model doesn't memorize exact
+        camera angles and lighting. Validation and test images use fixed, deterministic
+        preprocessing. Both use the ImageNet mean/standard deviation, since that is what VGG16's
+        pretrained weights expect.
+      </p>
+
+      <span class="code-label">Training vs. evaluation transforms</span>
+      <div class="code-card">
+        <pre>IMAGE_SIZE = 224
+IMAGENET_MEAN = [0.485, 0.456, 0.406]
+IMAGENET_STD  = [0.229, 0.224, 0.225]
+
+train_transform = transforms.Compose([
+    transforms.RandomResizedCrop(IMAGE_SIZE, scale=(0.80, 1.00)),
+    transforms.RandomRotation(10),
+    transforms.ColorJitter(brightness=0.15, contrast=0.15),
+    transforms.RandomHorizontalFlip(p=0.5),
+    transforms.ToTensor(),
+    transforms.Normalize(mean=IMAGENET_MEAN, std=IMAGENET_STD)
+])
+
+evaluation_transform = transforms.Compose([
+    transforms.Resize(256),
+    transforms.CenterCrop(IMAGE_SIZE),
+    transforms.ToTensor(),
+    transforms.Normalize(mean=IMAGENET_MEAN, std=IMAGENET_STD)
+])</pre>
+      </div>
+
+      <figure class="diagram-figure">
+        <img src="assets/tl_augmented_batch.png" alt="A batch of eight augmented bearing images with random crops, rotation, color jitter, and flips" loading="lazy" />
+        <figcaption>One augmented training batch — random crop, rotation, color jitter, and horizontal flip applied on the fly, a different variation every epoch.</figcaption>
+      </figure>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <span class="section-number">T3</span>
+        <h2>VGG16 architecture: feature extractor, pooling, classifier</h2>
+      </div>
+
+      <p>
+        VGG16 splits into three parts: a convolutional <strong>feature extractor</strong> (13
+        convolution layers in 5 blocks, each followed by max pooling), an
+        <strong>adaptive average pool</strong>, and a fully-connected <strong>classifier</strong>
+        originally built for ImageNet's 1000 classes.
+      </p>
+
+      <div class="chain">
+        <div class="chain-step">
+          <strong>Block 1–2</strong>
+          <p style="margin:8px 0 0;">64 → 128 filters</p>
+        </div>
+        <div class="chain-step">
+          <strong>Block 3</strong>
+          <p style="margin:8px 0 0;">256 filters × 3 layers</p>
+        </div>
+        <div class="chain-step">
+          <strong>Block 4–5</strong>
+          <p style="margin:8px 0 0;">512 filters × 3 layers, twice</p>
+        </div>
+        <div class="chain-step">
+          <strong>Classifier</strong>
+          <p style="margin:8px 0 0;">4096 → 4096 → 1000</p>
+        </div>
+      </div>
+
+      <div class="equation-card highlight" style="margin-top:20px;">
+        <h3>Flattening the feature map</h3>
+        <p>For a 224×224 input, the feature extractor produces 512 feature maps of size 7×7:</p>
+        \[ 512 \times 7 \times 7 = 25{,}088 \]
+        <p style="margin:0;">That 25,088-length vector feeds VGG16's original classifier — and the new one built for this project.</p>
+      </div>
+
+      <span class="code-label">Shape trace through the pretrained network</span>
+      <div class="code-card">
+        <pre>Input shape          : torch.Size([1, 3, 224, 224])
+After features       : torch.Size([1, 512, 7, 7])
+After avgpool        : torch.Size([1, 512, 7, 7])
+After flattening      : torch.Size([1, 25088])</pre>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <span class="section-number">T4</span>
+        <h2>Stage 1 — freeze VGG16, train a new classifier head</h2>
+      </div>
+
+      <p>
+        Every pretrained parameter is frozen. VGG16's final <code>Linear(4096 → 1000)</code> layer
+        — built for 1000 ImageNet classes — is replaced with a fresh
+        <code>Linear(4096 → 2)</code> layer for <code>defective</code>/<code>good</code>, and only
+        that new layer is trained.
+      </p>
+
+      <span class="code-label">Freeze and replace the final layer</span>
+      <div class="code-card">
+        <pre>for parameter in model.parameters():
+    parameter.requires_grad = False
+
+input_features = model.classifier[6].in_features
+model.classifier[6] = nn.Linear(input_features, number_of_classes)
+model = model.to(device)</pre>
+      </div>
+
+      <div class="metric-row">
+        <div class="metric-box">
+          <span class="metric-value">134,268,738</span>
+          <span class="metric-label">Total parameters</span>
+        </div>
+        <div class="metric-box">
+          <span class="metric-value">8,194</span>
+          <span class="metric-label">Stage 1 trainable</span>
+        </div>
+        <div class="metric-box">
+          <span class="metric-value">0.006%</span>
+          <span class="metric-label">Trainable percent</span>
+        </div>
+      </div>
+
+      <div class="note">
+        The class imbalance from Part T1 is handled with a weighted cross-entropy loss
+        (<code>defective</code>: 0.626, <code>good</code>: 2.486) so the much rarer
+        <code>good</code> class isn't ignored during training.
+      </div>
+
+      <div class="fig-grid" style="margin-top:20px;">
+        <figure class="diagram-figure">
+          <img src="assets/tl_stage1_loss.png" alt="Stage 1 training and validation loss curves over 5 epochs" loading="lazy" />
+          <figcaption>Stage 1 loss — training and validation loss both trend down over 5 epochs with the frozen backbone.</figcaption>
+        </figure>
+        <figure class="diagram-figure">
+          <img src="assets/tl_stage1_accuracy.png" alt="Stage 1 training and validation accuracy curves over 5 epochs, reaching about 96 percent validation accuracy" loading="lazy" />
+          <figcaption>Stage 1 accuracy — validation accuracy reaches 96.5% training only the new classifier head.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <span class="section-number">T5</span>
+        <h2>Stage 2 — partial fine-tuning of the last convolution block</h2>
+      </div>
+
+      <p>
+        VGG16's final convolution block (Block 5, layers 24 onward) is unfrozen so the deepest,
+        most task-specific features can adapt to bearing surfaces and defects. It trains with a
+        much smaller learning rate than the classifier head, since pretrained features should
+        move carefully rather than be overwritten.
+      </p>
+
+      <span class="code-label">Unfreeze Block 5, use two learning rates</span>
+      <div class="code-card">
+        <pre>for parameter in model.features[24:].parameters():
+    parameter.requires_grad = True
+
+stage_2_optimizer = optim.Adam([
+    {"params": model.features[24:].parameters(), "lr": 0.00001},
+    {"params": model.classifier[6].parameters(), "lr": 0.0001}
+])</pre>
+      </div>
+
+      <div class="grid-2">
+        <div class="equation-card">
+          <h3>Stage 1 → Stage 2</h3>
+          <p style="margin:0;">Best validation accuracy improves from</p>
+          \[ 0.9646 \ \rightarrow\ 1.0000 \]
+        </div>
+        <div class="equation-card success">
+          <h3>Trade-off</h3>
+          <p style="margin:0;">
+            Fine-tuning more parameters can improve accuracy further, but costs more training time
+            and carries a higher overfitting risk on a dataset this small.
+          </p>
+        </div>
+      </div>
+
+      <div class="fig-grid" style="margin-top:8px;">
+        <figure class="diagram-figure">
+          <img src="assets/tl_stage2_loss.png" alt="Stage 2 training and validation loss curves over 5 epochs, both decreasing toward zero" loading="lazy" />
+          <figcaption>Stage 2 loss — both curves keep falling once Block 5 is unfrozen.</figcaption>
+        </figure>
+        <figure class="diagram-figure">
+          <img src="assets/tl_stage2_accuracy.png" alt="Stage 2 training and validation accuracy curves over 5 epochs, reaching 100 percent validation accuracy" loading="lazy" />
+          <figcaption>Stage 2 accuracy — validation accuracy reaches 100% by the final epoch.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <span class="section-number">T6</span>
+        <h2>Final test evaluation</h2>
+      </div>
+
+      <p>
+        The test split is touched only once, after both training stages and model selection are
+        complete — it was never used to tune anything.
+      </p>
+
+      <div class="metric-row">
+        <div class="metric-box">
+          <span class="metric-value">1.0000</span>
+          <span class="metric-label">Test accuracy</span>
+        </div>
+        <div class="metric-box">
+          <span class="metric-value">0.0110</span>
+          <span class="metric-label">Test loss</span>
+        </div>
+        <div class="metric-box">
+          <span class="metric-value">0 / 115</span>
+          <span class="metric-label">Misclassified images</span>
+        </div>
+      </div>
+
+      <div class="card" style="overflow-x:auto;">
+        <h3>Classification report</h3>
+        <table class="summary-table" aria-label="Precision, recall, and F1-score per class">
+          <thead>
+            <tr><th>Class</th><th>Precision</th><th>Recall</th><th>F1-score</th><th>Support</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>defective</td><td>1.0000</td><td>1.0000</td><td>1.0000</td><td>92</td></tr>
+            <tr><td>good</td><td>1.0000</td><td>1.0000</td><td>1.0000</td><td>23</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <figure class="diagram-figure" style="margin-top:20px;">
+        <img src="assets/tl_confusion_matrix.png" alt="Confusion matrix showing 92 correct defective predictions and 23 correct good predictions, with zero errors" loading="lazy" />
+        <figcaption>The confusion matrix on the held-out test set: every defective and every good bearing was classified correctly.</figcaption>
+      </figure>
+
+      <figure class="diagram-figure">
+        <img src="assets/tl_test_predictions.png" alt="A grid of eight test images with their actual label, predicted label, and confidence score" loading="lazy" />
+        <figcaption>A sample of test predictions with confidence scores — the model is not just correct, it's confident.</figcaption>
+      </figure>
+
+      <div class="note">
+        A perfect test score on 115 images is encouraging but not proof the model generalizes to
+        every camera, lighting condition, or bearing type it will see in deployment — see the
+        engineering questions in Part T8.
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <span class="section-number">T7</span>
+        <h2>Predicting a new image</h2>
+      </div>
+
+      <p>
+        The same <code>evaluation_transform</code> from Part T2 is applied to a single newly
+        uploaded photograph, run through the trained model, and turned into a class prediction
+        with a confidence score via softmax — the same softmax used in the from-scratch CNN
+        section above.
+      </p>
+
+      <span class="code-label">predict_single_image()</span>
+      <div class="code-card">
+        <pre>def predict_single_image(model, image_path, transform, class_names, device):
+    image = Image.open(image_path).convert("RGB")
+    input_tensor = transform(image).unsqueeze(0).to(device)
+
+    model.eval()
+    with torch.no_grad():
+        outputs = model(input_tensor)
+        probabilities = torch.softmax(outputs, dim=1)
+        prediction = probabilities.argmax(dim=1).item()
+
+    return class_names[prediction], probabilities.cpu().numpy()[0]</pre>
+      </div>
+
+      <p class="note">
+        On an unrelated bearing photo pulled from outside the dataset, the model predicted
+        <strong>defective</strong> with 0.999 confidence.
+      </p>
+
+		<div class="fig-grid">
+		  <figure class="diagram-figure">
+			<img src="assets/test_bearing.png" alt="A new bearing photograph uploaded for prediction, classified as defective with high confidence" loading="lazy" />
+			<figcaption>The new bearing image used for prediction — passed through the same <code>evaluation_transform</code> pipeline as the test set.</figcaption>
+		  </figure>
+		  <figure class="diagram-figure">
+			<img src="assets/tl_prediction_probabilities.png" alt="Bar chart of predicted class probabilities for the new image, almost entirely weighted toward defective" loading="lazy" />
+			<figcaption>The predicted class probabilities for that image — softmax output, same as the "class scores → probabilities" step in the CNN section.</figcaption>
+		  </figure>
+		</div>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <span class="section-number">T8</span>
+        <h2>Interpretation and engineering questions</h2>
+      </div>
+
+      <div class="grid-2">
+        <div class="equation-card">
+          <h3>Stage 1: frozen feature extractor</h3>
+          <p style="margin:0 0 6px;">Only the new final layer is trained.</p>
+          <ul style="margin:0;">
+            <li>Fast</li>
+            <li>Few trainable parameters</li>
+            <li>Lower overfitting risk</li>
+            <li>Suitable for a small dataset</li>
+          </ul>
+        </div>
+        <div class="equation-card success">
+          <h3>Stage 2: partial fine-tuning</h3>
+          <p style="margin:0 0 6px;">Block 5 and the new output layer are trained.</p>
+          <ul style="margin:0;">
+            <li>Deeper features adapt to bearing surfaces and defects</li>
+            <li>May improve validation and test performance</li>
+            <li>Slower, with greater overfitting risk</li>
+            <li>Pretrained layers need a smaller learning rate</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:20px;">
+        <h3>Questions worth asking before deployment</h3>
+        <ol class="question-list">
+          <li>What is the recall of the <code>defective</code> class?</li>
+          <li>How many defective bearings are predicted as good?</li>
+          <li>Are errors caused by the model, the labels, lighting, or camera position?</li>
+          <li>Is confidence reliable on ambiguous images?</li>
+          <li>Is VGG16 fast enough for the intended deployment hardware?</li>
+        </ol>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <span class="section-number">T9</span>
+        <h2>Interactive Google Colab Notebook</h2>
+      </div>
+
+      <div class="card">
+        <p>
+          Run the complete transfer-learning workflow yourself — mounting the dataset, both
+          training stages, test evaluation, and prediction on a new image — in the accompanying
+          Colab notebook.
+        </p>
+
+        <div class="grid-2">
+          <div class="equation-card">
+            <h3>What you will find inside</h3>
+            <ul>
+              <li>Dataset loading &amp; verification</li>
+              <li>Augmentation pipeline</li>
+              <li>Pretrained VGG16 architecture walkthrough</li>
+              <li>Stage 1: frozen feature extraction</li>
+              <li>Stage 2: partial fine-tuning</li>
+              <li>Confusion matrix &amp; classification report</li>
+              <li>Prediction on a new uploaded image</li>
+              <li>Saving &amp; reloading the trained model</li>
+            </ul>
+          </div>
+
+          <div class="equation-card success">
+            <h3>Launch Google Colab</h3>
+            <p>Click the button below to open the notebook directly in Google Colab.</p>
+            <p style="margin-top:20px;text-align:center;">
+              <a
+                href="https://colab.research.google.com/drive/14lFf6AnBTTsf0PBKEhEy6ei1bHvbQux0?usp=sharing"
                 target="_blank"
                 style="
                   display:inline-block;
