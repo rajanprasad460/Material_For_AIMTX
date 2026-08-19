@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Interactive AI for Mechatronics learning materials covering OR and XOR gates, CNNs, VGG16 transfer learning, Google Colab notebooks, and downloadable lecture slides." />
+  <meta name="description" content="Interactive AI for Mechatronics learning materials covering OR and XOR gates, recurrent neural networks, CNNs, VGG16 transfer learning, Google Colab notebooks, and downloadable lecture slides." />
   <title>AI for Mechatronics | Interactive Lessons and Slides</title>
   <link rel="canonical" href="https://aimtx.rajan-prasad.com.np/" />
   <meta property="og:url" content="https://aimtx.rajan-prasad.com.np/" />
@@ -657,8 +657,34 @@
     }
 
     /* Transfer-learning lesson additions */
+    .lesson-divider.rnn-divider {
+      background: linear-gradient(135deg, #4b2a7b, #7b61c9);
+    }
+
     .lesson-divider.tl-divider {
       background: linear-gradient(135deg, #0b5a4a, #16a37e);
+    }
+
+    .rnn-timeline {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(115px, 1fr));
+      gap: 12px;
+      margin: 18px 0;
+    }
+
+    .rnn-state {
+      padding: 14px 10px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface-soft);
+      text-align: center;
+    }
+
+    .rnn-state strong {
+      display: block;
+      margin-top: 4px;
+      color: var(--primary-dark);
+      font-size: 1.12rem;
     }
 
     .metric-row {
@@ -1046,7 +1072,7 @@
 
     .path-grid {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
       gap: 13px;
     }
 
@@ -1570,6 +1596,7 @@
         <a href="#or-gate">ANN Lessons</a>
         <a href="#cnn-gate">CNN</a>
         <a href="#tl-gate">Transfer Learning</a>
+        <a href="#rnn-gate">RNN</a>
         <a href="https://rajan-prasad.com.np/">Instructor Site</a>
       </div>
     </div>
@@ -1582,7 +1609,7 @@
         <h1>Learn AI through engineering examples.</h1>
         <p class="lead">
           Follow a guided path from neuron training and backpropagation to convolutional
-          networks and transfer learning for bearing-condition classification.
+          networks, bearing-condition classification, and recurrent sequence models.
         </p>
         <div class="hero-actions">
           <a class="hero-button primary" href="#learning-path">Start the learning path</a>
@@ -1597,7 +1624,7 @@
           <div class="mastery-row">
             <div class="mastery-ring" id="mastery-ring"><strong id="mastery-percent">0%</strong></div>
             <div class="mastery-copy">
-              <strong id="mastery-count">0 of 4 units</strong>
+              <strong id="mastery-count">0 of 5 units</strong>
               <span>completed on this device</span>
             </div>
           </div>
@@ -1614,7 +1641,7 @@
           <span class="eyebrow">Recommended sequence</span>
           <h2 id="pathway-title">Your learning path</h2>
         </div>
-        <p>Begin with a single neuron, add hidden-layer reasoning, then progress to image features and an industrial transfer-learning application.</p>
+        <p>Begin with a single neuron, add hidden-layer reasoning, progress to image features and an industrial bearing application, then learn sequence memory with an RNN.</p>
       </div>
       <div class="path-grid">
         <article class="path-card" data-unit="or-gate">
@@ -1641,6 +1668,12 @@
           <p>Apply pretrained VGG16 features and partial fine-tuning to bearing images.</p>
           <div class="path-controls"><a class="path-action" href="#tl-gate">Start lesson</a><button class="complete-toggle" type="button">Mark complete</button></div>
         </article>
+        <article class="path-card" data-unit="rnn-gate">
+          <span class="path-step">05</span>
+          <h3>Sequence Memory</h3>
+          <p>Build a one-neuron RNN and train it with backpropagation through time.</p>
+          <div class="path-controls"><a class="path-action" href="#rnn-gate">Start lesson</a><button class="complete-toggle" type="button">Mark complete</button></div>
+        </article>
       </div>
     </div>
   </section>
@@ -1652,6 +1685,7 @@
       <a href="#xor-gate" data-section="xor-gate">XOR Gate</a>
       <a href="#cnn-gate" data-section="cnn-gate">CNN Fundamentals</a>
       <a href="#tl-gate" data-section="tl-gate">Transfer Learning</a>
+      <a href="#rnn-gate" data-section="rnn-gate">RNN Fundamentals</a>
     </div>
   </nav>
 
@@ -1668,6 +1702,7 @@
           <a href="#xor-gate" data-section="xor-gate"><span class="outline-dot">2</span>Hidden layers</a>
           <a href="#cnn-gate" data-section="cnn-gate"><span class="outline-dot">3</span>CNN fundamentals</a>
           <a href="#tl-gate" data-section="tl-gate"><span class="outline-dot">4</span>Bearing project</a>
+          <a href="#rnn-gate" data-section="rnn-gate"><span class="outline-dot">5</span>Sequence memory</a>
         </nav>
       </aside>
       <div class="lesson-stream">
@@ -1754,6 +1789,9 @@
 			  <a class="slide-button"
 				 href="assets/RNN_Lecture_AI_for_Mechatronics.pdf"
 				 download>Download</a>
+              <a class="slide-button"
+                 href="assets/RNN_From_Scratch_Basic_Python.ipynb"
+                 download>Notebook</a>
 			</div>
 		  </article>	
 
@@ -2663,6 +2701,7 @@
         <div id="xorPredictions" class="xor-predictions"></div>
       </div>
     </section>
+
 
     <div class="lesson-divider cnn-divider" id="cnn-gate">
       <span class="lesson-kicker">Learning Unit 03 · Computer Vision</span>
@@ -3638,6 +3677,498 @@ stage_2_optimizer = optim.Adam([
               </a>
             </p>
           </div>
+        </div>
+      </div>
+    </section>
+
+
+    <div class="lesson-divider rnn-divider" id="rnn-gate">
+      <span class="lesson-kicker">Learning Unit 05 · Sequence Models</span>
+      <h2>Recurrent Neural Network from Scratch</h2>
+      <p>
+        Build a one-hidden-neuron RNN using basic Python, train it with backpropagation
+        through time, and classify six-step sequences as increasing or decreasing.
+      </p>
+    </div>
+
+    <section>
+      <div class="section-title">
+        <span class="section-number">R1</span>
+        <h2>Why an RNN is needed</h2>
+      </div>
+
+      <p>
+        Increasing and decreasing sequences may contain the same values in a different
+        order. An RNN processes one value at a time while carrying information from the
+        previous time step in its hidden state.
+      </p>
+
+      <div class="grid-2">
+        <div class="equation-card">
+          <h3>Hidden-state update</h3>
+          \[
+            a_t=W_{xh}x_t+W_{hh}h_{t-1}+b_h,
+            \qquad h_t=\tanh(a_t)
+          \]
+        </div>
+        <div class="equation-card highlight">
+          <h3>Many-to-one output</h3>
+          \[
+            z=W_{hy}h_T+b_y,
+            \qquad \hat y=\sigma(z)
+          \]
+          <p style="margin:0;">\(\hat y\) is the probability that the sequence is increasing.</p>
+        </div>
+      </div>
+
+      <span class="code-label">One manual forward pass</span>
+      <div class="code-card">
+        <pre>sequence = [0.1, 0.3, 0.5]
+W_xh, W_hh, b_h = 1.0, 0.5, 0.0
+h = 0.0
+
+for x_t in sequence:
+    a_t = W_xh * x_t + W_hh * h + b_h
+    h = math.tanh(a_t)
+    print(round(a_t, 4), round(h, 4))</pre>
+      </div>
+
+      <div class="rnn-timeline" aria-label="Hidden states from the manual forward pass">
+        <div class="rnn-state">Initial<strong>\(h_0=0.0000\)</strong></div>
+        <div class="rnn-state">Step 1<strong>\(h_1=0.0997\)</strong></div>
+        <div class="rnn-state">Step 2<strong>\(h_2=0.3362\)</strong></div>
+        <div class="rnn-state">Step 3<strong>\(h_3=0.5837\)</strong></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <span class="section-number">R2</span>
+        <h2>Create the sequence dataset</h2>
+      </div>
+
+      <p>
+        Each sample contains six values. Positive steps produce increasing sequences
+        with target 1; negative steps produce decreasing sequences with target 0.
+        Small random variations prevent direct memorization.
+      </p>
+
+      <span class="code-label">Balanced synthetic sequences</span>
+      <div class="code-card">
+        <pre>def create_dataset(number_of_pairs=250, time_steps=6):
+    dataset = []
+
+    for _ in range(number_of_pairs):
+        start = random.uniform(-0.5, 0.5)
+        step = random.uniform(0.08, 0.18)
+        increasing, decreasing = [], []
+
+        for t in range(time_steps):
+            noise = random.uniform(-0.025, 0.025)
+            increasing.append(start + step * t + noise)
+            decreasing.append(start - step * t + noise)
+
+        dataset.append((increasing, 1))
+        dataset.append((decreasing, 0))
+
+    random.shuffle(dataset)
+    return dataset</pre>
+      </div>
+
+      <div class="metric-row">
+        <div class="metric-box"><span class="metric-label">Training samples</span><span class="metric-value">400</span></div>
+        <div class="metric-box"><span class="metric-label">Test samples</span><span class="metric-value">100</span></div>
+        <div class="metric-box"><span class="metric-label">Time steps</span><span class="metric-value">6</span></div>
+        <div class="metric-box"><span class="metric-label">Trainable parameters</span><span class="metric-value">5</span></div>
+      </div>
+
+      <div class="note">
+        The model learns \(W_{xh}\), \(W_{hh}\), \(b_h\), \(W_{hy}\), and \(b_y\).
+        The same recurrent parameters are reused at every time step.
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <span class="section-number">R3</span>
+        <h2>Forward propagation through time</h2>
+      </div>
+
+      <p>
+        Every hidden state is stored because the backward pass needs the complete
+        time history. Only the final hidden state is passed to the output neuron.
+      </p>
+
+      <span class="code-label">Essential forward function</span>
+      <div class="code-card">
+        <pre>def forward(sequence, parameters):
+    hidden_states = [0.0]
+
+    for x_t in sequence:
+        previous_h = hidden_states[-1]
+        a_t = (parameters['W_xh'] * x_t
+               + parameters['W_hh'] * previous_h
+               + parameters['b_h'])
+        hidden_states.append(math.tanh(a_t))
+
+    final_h = hidden_states[-1]
+    z = parameters['W_hy'] * final_h + parameters['b_y']
+    probability = sigmoid(z)
+    return probability, hidden_states</pre>
+      </div>
+
+      <div class="equation-card success">
+        <h3>Initial example</h3>
+        <p>
+          Before training, one decreasing sequence produced
+          \(\hat y=0.533\). The uncertain prediction is expected because the
+          five parameters are still randomly initialized.
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <span class="section-number">R4</span>
+        <h2>Backpropagation through time</h2>
+      </div>
+
+      <p>
+        Binary cross-entropy with a sigmoid output gives
+        \(\partial L/\partial z=\hat y-y\). The error then moves from the final
+        hidden state toward the first time step.
+      </p>
+
+      <div class="grid-2">
+        <div class="equation-card">
+          <h3>Output gradients</h3>
+          \[
+            \frac{\partial L}{\partial W_{hy}}=(\hat y-y)h_T,
+            \qquad
+            \frac{\partial L}{\partial b_y}=\hat y-y
+          \]
+        </div>
+        <div class="equation-card highlight">
+          <h3>Recurrent gradient</h3>
+          \[
+            \frac{\partial h_t}{\partial a_t}=1-h_t^2,
+            \qquad
+            \delta_t^h\equiv\frac{\partial L}{\partial a_t}
+          \]
+          <p style="margin:0;">
+            In the Python code, <code>d_a</code> represents \(\delta_t^h\). Each backward
+            step also multiplies the error by \(W_{hh}\).
+          </p>
+        </div>
+      </div>
+
+      <span class="code-label">Core BPTT loop</span>
+      <div class="code-card">
+        <pre>def gradients_for_one_sequence(sequence, target, parameters):
+    probability, hidden_states = forward(sequence, parameters)
+    gradients = {name: 0.0 for name in parameters}
+
+    d_z = probability - target
+    gradients['W_hy'] = d_z * hidden_states[-1]
+    gradients['b_y'] = d_z
+    d_h = d_z * parameters['W_hy']
+
+    for t in range(len(sequence) - 1, -1, -1):
+        h_t = hidden_states[t + 1]
+        h_previous = hidden_states[t]
+        d_a = d_h * (1.0 - h_t * h_t)
+
+        gradients['W_xh'] += d_a * sequence[t]
+        gradients['W_hh'] += d_a * h_previous
+        gradients['b_h'] += d_a
+        d_h = d_a * parameters['W_hh']
+
+    loss = binary_cross_entropy(target, probability)
+    return loss, gradients</pre>
+      </div>
+
+      <div class="card" style="overflow-x:auto; margin-top:20px;">
+        <h3>Meaning of the derivative variables</h3>
+        <table class="stage-table" aria-label="Meaning of derivative variables in the BPTT code">
+          <thead>
+            <tr><th>Code</th><th>Mathematical meaning</th><th>Role</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>d_z</code></td><td>\(\delta_T^y=\partial L/\partial z\)</td><td>Error at the final output score</td></tr>
+            <tr><td><code>d_h</code></td><td>\(\partial L/\partial h_t\)</td><td>Error arriving at a hidden state</td></tr>
+            <tr><td><code>d_a</code></td><td>\(\delta_t^h=\partial L/\partial a_t\)</td><td>Hidden pre-activation error after differentiating \(\tanh\)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <details class="card" open style="margin-top:16px;">
+        <summary><strong>Step 1: perform the forward pass and initialise the gradients</strong></summary>
+        <div class="code-card" style="margin-top:18px;">
+          <pre>probability, hidden_states = forward(sequence, parameters)
+gradients = {name: 0.0 for name in parameters}</pre>
+        </div>
+        <p>
+          The forward function returns the prediction \(\hat y\) and the complete hidden-state
+          history \([h_0,h_1,\ldots,h_T]\). Every hidden state is required because the backward
+          calculation moves from \(h_T\) to \(h_1\).
+        </p>
+        <p>
+          The gradient dictionary begins with zero for all five parameters:
+          \(W_{xh}\), \(W_{hh}\), \(b_h\), \(W_{hy}\), and \(b_y\).
+        </p>
+      </details>
+
+      <details class="card" style="margin-top:16px;">
+        <summary><strong>Step 2: calculate the output error and output-layer gradients</strong></summary>
+        <div class="code-card" style="margin-top:18px;">
+          <pre>d_z = probability - target
+gradients['W_hy'] = d_z * hidden_states[-1]
+gradients['b_y'] = d_z
+d_h = d_z * parameters['W_hy']</pre>
+        </div>
+        <p>
+          For a sigmoid output with binary cross-entropy loss, the activation and loss
+          derivatives simplify to
+        </p>
+        <div class="equation-card">
+          \[
+            d_z=\frac{\partial L}{\partial z}=\hat y-y
+          \]
+          \[
+            \frac{\partial L}{\partial W_{hy}}=d_z h_T,
+            \qquad
+            \frac{\partial L}{\partial b_y}=d_z
+          \]
+          \[
+            d_h=\frac{\partial L}{\partial h_T}=d_zW_{hy}
+          \]
+        </div>
+        <p class="note">
+          Example: if \(\hat y=0.8\) and \(y=1\), then \(d_z=-0.2\). The negative
+          derivative indicates that gradient descent should increase the predicted probability.
+        </p>
+      </details>
+
+      <details class="card" style="margin-top:16px;">
+        <summary><strong>Step 3: move backward through the hidden states</strong></summary>
+        <div class="code-card" style="margin-top:18px;">
+          <pre>for t in range(len(sequence) - 1, -1, -1):
+    h_t = hidden_states[t + 1]
+    h_previous = hidden_states[t]
+    d_a = d_h * (1.0 - h_t * h_t)</pre>
+        </div>
+        <p>
+          For a six-value sequence, the loop visits \(t=5,4,3,2,1,0\). The list begins
+          with the initial state, so input <code>sequence[t]</code> produces
+          <code>hidden_states[t + 1]</code>, while <code>hidden_states[t]</code> is its
+          preceding state.
+        </p>
+        <div class="equation-card highlight">
+          \[
+            h_t=\tanh(a_t)
+            \quad\Longrightarrow\quad
+            \frac{\partial h_t}{\partial a_t}=1-h_t^2
+          \]
+          \[
+            \delta_t^h
+            =\frac{\partial L}{\partial a_t}
+            =\frac{\partial L}{\partial h_t}
+             \odot\frac{\partial h_t}{\partial a_t}
+          \]
+        </div>
+        <p>
+          The error arriving at \(h_t\) can come from the output at time \(t\) and from the
+          next recurrent state. Substitution gives the general vector form
+        </p>
+        <div class="equation-card">
+          \[
+            \boxed{
+            \delta_t^h=
+            \left(W_{hy}^{T}\delta_t^y+W_{hh}^{T}\delta_{t+1}^h\right)
+            \odot\left(1-h_t^2\right)}
+          \]
+          <p style="margin-bottom:0;">
+            The symbol \(\odot\) denotes elementwise multiplication. For the website's
+            one-hidden-neuron scalar RNN, elementwise multiplication is ordinary
+            multiplication, represented by <code>*</code> in Python.
+          </p>
+        </div>
+        <div class="equation-card success">
+          <h3>Reduction for this many-to-one RNN</h3>
+          <p>Only the final hidden state \(h_T\) produces an output. Therefore,</p>
+          \[
+            \delta_T^h=
+            \left(W_{hy}\delta_T^y\right)\left(1-h_T^2\right)
+          \]
+          <p>At every earlier time step, there is no separate output error, so</p>
+          \[
+            \delta_t^h=
+            \left(W_{hh}\delta_{t+1}^h\right)\left(1-h_t^2\right),
+            \qquad t&lt;T.
+          \]
+          <p style="margin-bottom:0;">
+            Thus, <code>d_a = d_h * (1.0 - h_t * h_t)</code> is exactly the scalar
+            calculation of \(\delta_t^h\).
+          </p>
+        </div>
+      </details>
+
+      <details class="card" style="margin-top:16px;">
+        <summary><strong>Step 4: accumulate shared-parameter gradients and continue backward</strong></summary>
+        <div class="code-card" style="margin-top:18px;">
+          <pre>gradients['W_xh'] += d_a * sequence[t]
+gradients['W_hh'] += d_a * h_previous
+gradients['b_h'] += d_a
+d_h = d_a * parameters['W_hh']</pre>
+        </div>
+        <p>From \(a_t=W_{xh}x_t+W_{hh}h_{t-1}+b_h\), each time step contributes</p>
+        <div class="equation-card">
+          \[
+            \frac{\partial L}{\partial W_{xh}}\mathrel{+}=d_ax_t,
+            \qquad
+            \frac{\partial L}{\partial W_{hh}}\mathrel{+}=d_ah_{t-1},
+            \qquad
+            \frac{\partial L}{\partial b_h}\mathrel{+}=d_a
+          \]
+          \[
+            \frac{\partial L}{\partial h_{t-1}}=d_aW_{hh}
+          \]
+        </div>
+        <p>
+          The <code>+=</code> operation is essential: the RNN reuses the same recurrent
+          parameters at every time step, so their contributions must be added. The updated
+          <code>d_h</code> carries the error to the preceding hidden state.
+        </p>
+      </details>
+
+      <details class="card" style="margin-top:16px;">
+        <summary><strong>Step 5: calculate the sequence loss and return the result</strong></summary>
+        <div class="code-card" style="margin-top:18px;">
+          <pre>loss = binary_cross_entropy(target, probability)
+return loss, gradients</pre>
+        </div>
+        <p>
+          The function returns the binary cross-entropy loss for this sequence and the
+          gradients of all five trainable parameters. The training function then uses these
+          gradients to update the parameters.
+        </p>
+      </details>
+
+      <div class="equation-card success" style="margin-top:20px;">
+        <h3>Complete BPTT direction</h3>
+        \[
+          \text{output error}\rightarrow h_T\rightarrow h_{T-1}
+          \rightarrow\cdots\rightarrow h_1
+        \]
+        <p style="margin-bottom:0;">
+          BPTT moves backward because each \(h_t\) depends on \(h_{t-1}\). Gradient clipping
+          is applied later in the training loop to limit unusually large updates.
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <span class="section-number">R5</span>
+        <h2>Train and evaluate the RNN</h2>
+      </div>
+
+      <span class="code-label">Gradient-descent training</span>
+      <div class="code-card">
+        <pre>def train(training_data, parameters, epochs=35, learning_rate=0.03):
+    loss_history = []
+
+    for epoch in range(epochs):
+        random.shuffle(training_data)
+        total_loss = 0.0
+
+        for sequence, target in training_data:
+            loss, gradients = gradients_for_one_sequence(
+                sequence, target, parameters)
+            total_loss += loss
+
+            for name in parameters:
+                clipped = max(-5.0, min(5.0, gradients[name]))
+                parameters[name] -= learning_rate * clipped
+
+        loss_history.append(total_loss / len(training_data))
+
+    return loss_history</pre>
+      </div>
+
+      <div class="card" style="overflow-x:auto;">
+        <h3>Training history</h3>
+        <table class="stage-table" aria-label="RNN training loss">
+          <thead>
+            <tr><th>Epoch</th><th>1</th><th>5</th><th>10</th><th>20</th><th>35</th></tr>
+          </thead>
+          <tbody>
+            <tr><th>Average loss</th><td>0.5077</td><td>0.0538</td><td>0.0284</td><td>0.0155</td><td>0.0104</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="metric-row">
+        <div class="metric-box"><span class="metric-label">Training accuracy</span><span class="metric-value">99.8%</span></div>
+        <div class="metric-box"><span class="metric-label">Test accuracy</span><span class="metric-value">98.0%</span></div>
+        <div class="metric-box"><span class="metric-label">Final average loss</span><span class="metric-value">0.0104</span></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <span class="section-number">R6</span>
+        <h2>Verify that sequence order matters</h2>
+      </div>
+
+      <p>
+        The final check uses the same six values in opposite orders. Changing only
+        the order reverses the classification, demonstrating that the recurrent
+        state has learned temporal direction.
+      </p>
+
+      <div class="card" style="overflow-x:auto;">
+        <table class="summary-table" aria-label="RNN predictions for original and reversed order">
+          <thead>
+            <tr><th>Sequence</th><th>\(P(\mathrm{increasing})\)</th><th>Prediction</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>−0.4, −0.2, 0.0, 0.2, 0.4, 0.6</td><td>0.999</td><td>Increasing</td></tr>
+            <tr><td>0.6, 0.4, 0.2, 0.0, −0.2, −0.4</td><td>0.003</td><td>Decreasing</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="equation-card success">
+        <h3>Key takeaway</h3>
+        <p>
+          An RNN repeatedly combines the current input with its previous hidden
+          state. Training adjusts shared parameters so that the final hidden state
+          retains information needed for the sequence-level prediction.
+        </p>
+      </div>
+
+      <div style="margin-top:20px;text-align:center;">
+        <a
+          href="https://colab.research.google.com/drive/1_mBIjM-6hqw0DmSx0UGmaNXNp_gsHlBI"
+          target="_blank"
+          rel="noopener"
+          style="
+            display:inline-block;
+            padding:14px 24px;
+            background:#F9AB00;
+            color:#ffffff;
+            text-decoration:none;
+            border-radius:10px;
+            font-weight:700;
+            font-size:16px;
+          ">
+          🚀 Open in Google Colab
+        </a>
+        <div class="slide-actions" style="justify-content:center;margin-top:12px;">
+          <a class="slide-button"
+             href="assets/RNN_From_Scratch_Basic_Python.ipynb"
+             download>Download notebook</a>
         </div>
       </div>
     </section>
