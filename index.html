@@ -3882,9 +3882,149 @@ for x_t in sequence:
     return loss, gradients</pre>
       </div>
 
-      <div class="note">
-        BPTT moves backward because \(h_t\) depends on \(h_{t-1}\). Gradient clipping
-        is applied during training to limit unusually large updates.
+      <div class="card" style="overflow-x:auto; margin-top:20px;">
+        <h3>Meaning of the derivative variables</h3>
+        <table class="stage-table" aria-label="Meaning of derivative variables in the BPTT code">
+          <thead>
+            <tr><th>Code</th><th>Mathematical meaning</th><th>Role</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>d_z</code></td><td>\(\partial L/\partial z\)</td><td>Error at the output score</td></tr>
+            <tr><td><code>d_h</code></td><td>\(\partial L/\partial h_t\)</td><td>Error arriving at a hidden state</td></tr>
+            <tr><td><code>d_a</code></td><td>\(\partial L/\partial a_t\)</td><td>Error after differentiating \(\tanh\)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <details class="card" open style="margin-top:16px;">
+        <summary><strong>Step 1: perform the forward pass and initialise the gradients</strong></summary>
+        <div class="code-card" style="margin-top:18px;">
+          <pre>probability, hidden_states = forward(sequence, parameters)
+gradients = {name: 0.0 for name in parameters}</pre>
+        </div>
+        <p>
+          The forward function returns the prediction \(\hat y\) and the complete hidden-state
+          history \([h_0,h_1,\ldots,h_T]\). Every hidden state is required because the backward
+          calculation moves from \(h_T\) to \(h_1\).
+        </p>
+        <p>
+          The gradient dictionary begins with zero for all five parameters:
+          \(W_{xh}\), \(W_{hh}\), \(b_h\), \(W_{hy}\), and \(b_y\).
+        </p>
+      </details>
+
+      <details class="card" style="margin-top:16px;">
+        <summary><strong>Step 2: calculate the output error and output-layer gradients</strong></summary>
+        <div class="code-card" style="margin-top:18px;">
+          <pre>d_z = probability - target
+gradients['W_hy'] = d_z * hidden_states[-1]
+gradients['b_y'] = d_z
+d_h = d_z * parameters['W_hy']</pre>
+        </div>
+        <p>
+          For a sigmoid output with binary cross-entropy loss, the activation and loss
+          derivatives simplify to
+        </p>
+        <div class="equation-card">
+          \[
+            d_z=\frac{\partial L}{\partial z}=\hat y-y
+          \]
+          \[
+            \frac{\partial L}{\partial W_{hy}}=d_z h_T,
+            \qquad
+            \frac{\partial L}{\partial b_y}=d_z
+          \]
+          \[
+            d_h=\frac{\partial L}{\partial h_T}=d_zW_{hy}
+          \]
+        </div>
+        <p class="note">
+          Example: if \(\hat y=0.8\) and \(y=1\), then \(d_z=-0.2\). The negative
+          derivative indicates that gradient descent should increase the predicted probability.
+        </p>
+      </details>
+
+      <details class="card" style="margin-top:16px;">
+        <summary><strong>Step 3: move backward through the hidden states</strong></summary>
+        <div class="code-card" style="margin-top:18px;">
+          <pre>for t in range(len(sequence) - 1, -1, -1):
+    h_t = hidden_states[t + 1]
+    h_previous = hidden_states[t]
+    d_a = d_h * (1.0 - h_t * h_t)</pre>
+        </div>
+        <p>
+          For a six-value sequence, the loop visits \(t=5,4,3,2,1,0\). The list begins
+          with the initial state, so input <code>sequence[t]</code> produces
+          <code>hidden_states[t + 1]</code>, while <code>hidden_states[t]</code> is its
+          preceding state.
+        </p>
+        <div class="equation-card highlight">
+          \[
+            h_t=\tanh(a_t)
+            \quad\Longrightarrow\quad
+            \frac{\partial h_t}{\partial a_t}=1-h_t^2
+          \]
+          \[
+            d_a=d_h(1-h_t^2)
+          \]
+        </div>
+        <p>
+          Thus, <code>d_a</code> is the hidden-state error after it passes backward through
+          the \(\tanh\) activation.
+        </p>
+      </details>
+
+      <details class="card" style="margin-top:16px;">
+        <summary><strong>Step 4: accumulate shared-parameter gradients and continue backward</strong></summary>
+        <div class="code-card" style="margin-top:18px;">
+          <pre>gradients['W_xh'] += d_a * sequence[t]
+gradients['W_hh'] += d_a * h_previous
+gradients['b_h'] += d_a
+d_h = d_a * parameters['W_hh']</pre>
+        </div>
+        <p>From \(a_t=W_{xh}x_t+W_{hh}h_{t-1}+b_h\), each time step contributes</p>
+        <div class="equation-card">
+          \[
+            \frac{\partial L}{\partial W_{xh}}\mathrel{+}=d_ax_t,
+            \qquad
+            \frac{\partial L}{\partial W_{hh}}\mathrel{+}=d_ah_{t-1},
+            \qquad
+            \frac{\partial L}{\partial b_h}\mathrel{+}=d_a
+          \]
+          \[
+            \frac{\partial L}{\partial h_{t-1}}=d_aW_{hh}
+          \]
+        </div>
+        <p>
+          The <code>+=</code> operation is essential: the RNN reuses the same recurrent
+          parameters at every time step, so their contributions must be added. The updated
+          <code>d_h</code> carries the error to the preceding hidden state.
+        </p>
+      </details>
+
+      <details class="card" style="margin-top:16px;">
+        <summary><strong>Step 5: calculate the sequence loss and return the result</strong></summary>
+        <div class="code-card" style="margin-top:18px;">
+          <pre>loss = binary_cross_entropy(target, probability)
+return loss, gradients</pre>
+        </div>
+        <p>
+          The function returns the binary cross-entropy loss for this sequence and the
+          gradients of all five trainable parameters. The training function then uses these
+          gradients to update the parameters.
+        </p>
+      </details>
+
+      <div class="equation-card success" style="margin-top:20px;">
+        <h3>Complete BPTT direction</h3>
+        \[
+          \text{output error}\rightarrow h_T\rightarrow h_{T-1}
+          \rightarrow\cdots\rightarrow h_1
+        \]
+        <p style="margin-bottom:0;">
+          BPTT moves backward because each \(h_t\) depends on \(h_{t-1}\). Gradient clipping
+          is applied later in the training loop to limit unusually large updates.
+        </p>
       </div>
     </section>
 
