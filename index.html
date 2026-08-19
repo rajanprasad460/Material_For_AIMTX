@@ -3851,9 +3851,14 @@ for x_t in sequence:
         <div class="equation-card highlight">
           <h3>Recurrent gradient</h3>
           \[
-            \frac{\partial h_t}{\partial a_t}=1-h_t^2
+            \frac{\partial h_t}{\partial a_t}=1-h_t^2,
+            \qquad
+            \delta_t^h\equiv\frac{\partial L}{\partial a_t}
           \]
-          <p style="margin:0;">Each backward step also multiplies the error by \(W_{hh}\).</p>
+          <p style="margin:0;">
+            In the Python code, <code>d_a</code> represents \(\delta_t^h\). Each backward
+            step also multiplies the error by \(W_{hh}\).
+          </p>
         </div>
       </div>
 
@@ -3889,9 +3894,9 @@ for x_t in sequence:
             <tr><th>Code</th><th>Mathematical meaning</th><th>Role</th></tr>
           </thead>
           <tbody>
-            <tr><td><code>d_z</code></td><td>\(\partial L/\partial z\)</td><td>Error at the output score</td></tr>
+            <tr><td><code>d_z</code></td><td>\(\delta_T^y=\partial L/\partial z\)</td><td>Error at the final output score</td></tr>
             <tr><td><code>d_h</code></td><td>\(\partial L/\partial h_t\)</td><td>Error arriving at a hidden state</td></tr>
-            <tr><td><code>d_a</code></td><td>\(\partial L/\partial a_t\)</td><td>Error after differentiating \(\tanh\)</td></tr>
+            <tr><td><code>d_a</code></td><td>\(\delta_t^h=\partial L/\partial a_t\)</td><td>Hidden pre-activation error after differentiating \(\tanh\)</td></tr>
           </tbody>
         </table>
       </div>
@@ -3965,13 +3970,47 @@ d_h = d_z * parameters['W_hy']</pre>
             \frac{\partial h_t}{\partial a_t}=1-h_t^2
           \]
           \[
-            d_a=d_h(1-h_t^2)
+            \delta_t^h
+            =\frac{\partial L}{\partial a_t}
+            =\frac{\partial L}{\partial h_t}
+             \odot\frac{\partial h_t}{\partial a_t}
           \]
         </div>
         <p>
-          Thus, <code>d_a</code> is the hidden-state error after it passes backward through
-          the \(\tanh\) activation.
+          The error arriving at \(h_t\) can come from the output at time \(t\) and from the
+          next recurrent state. Substitution gives the general vector form
         </p>
+        <div class="equation-card">
+          \[
+            \boxed{
+            \delta_t^h=
+            \left(W_{hy}^{T}\delta_t^y+W_{hh}^{T}\delta_{t+1}^h\right)
+            \odot\left(1-h_t^2\right)}
+          \]
+          <p style="margin-bottom:0;">
+            The symbol \(\odot\) denotes elementwise multiplication. For the website's
+            one-hidden-neuron scalar RNN, elementwise multiplication is ordinary
+            multiplication, represented by <code>*</code> in Python.
+          </p>
+        </div>
+        <div class="equation-card success">
+          <h3>Reduction for this many-to-one RNN</h3>
+          <p>Only the final hidden state \(h_T\) produces an output. Therefore,</p>
+          \[
+            \delta_T^h=
+            \left(W_{hy}\delta_T^y\right)\left(1-h_T^2\right)
+          \]
+          <p>At every earlier time step, there is no separate output error, so</p>
+          \[
+            \delta_t^h=
+            \left(W_{hh}\delta_{t+1}^h\right)\left(1-h_t^2\right),
+            \qquad t&lt;T.
+          \]
+          <p style="margin-bottom:0;">
+            Thus, <code>d_a = d_h * (1.0 - h_t * h_t)</code> is exactly the scalar
+            calculation of \(\delta_t^h\).
+          </p>
+        </div>
       </details>
 
       <details class="card" style="margin-top:16px;">
