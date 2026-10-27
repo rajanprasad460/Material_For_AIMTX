@@ -1,76 +1,52 @@
-# AI for Mechatronics subdomain package
+# AI for Mechatronics — Interactive Course Portal
 
-Recommended public address:
+Website: https://aimtx.rajan-prasad.com.np/
 
-    https://aimtx.rajan-prasad.com.np/
+An interactive postgraduate teaching portal with mathematical walkthroughs, numerical examples, interactive demonstrations, lecture slides, quizzes, and Google Colab exercises.
 
-## Package contents
+## Course outline
 
-- `index.html` — complete interactive OR-gate lesson
-- `assets/single_neuron_and_backpropagation.png`
-- `assets/forward_and_backpropagation_overview.png`
-- `OR_Gate_Manual_Backpropagation.ipynb`
-- `homepage-module-snippet.html` — optional card for the main homepage
-- `.htaccess` — optional Apache directory settings
+The homepage uses six collapsible lessons. The course navigation and sidebar open the selected unit.
 
-## Recommended deployment
+| Unit | Topic | Main content |
+| --- | --- | --- |
+| 01 | Artificial Neural Networks | Single-neuron OR gate, forward propagation and manual backpropagation |
+| 02 | Multilayer Neural Networks | XOR gate, hidden layers and interactive training |
+| 03 | Convolutional Neural Networks | CNN fundamentals, convolution, activation, padding and pooling |
+| 04 | Transfer Learning | VGG16 bearing-defect classification and evaluation |
+| 05 | Recurrent Neural Networks | Sequence memory, recurrent states and training |
+| 06 | Fuzzy Logic & ANFIS | Gaussian membership functions, first-order Sugeno rules, least-squares consequent estimation and interactive inference |
 
-1. In your domain or hosting control panel, create the subdomain:
+ANFIS appears immediately after Unit 05 in the main course lesson stream, before the independent Colab notebook library.
 
-       aimtx.rajan-prasad.com.np
+## Other course resources
 
-2. Point the subdomain to a dedicated document root, for example:
+- Quiz access and instructions.
+- Lecture slide PDFs and syllabus.
+- Colab notebook library for classroom demonstrations.
+- Responsive heading navigation, unit navigation, and course outline sidebar.
 
-       public_html/aimtx/
+## Repository files
 
-   Some hosts create a separate folder automatically, such as:
+- `index.html`: main page, all six lessons, styles, mathematical equations, and interactive JavaScript.
+- `assets/`: lecture PDFs, Colab notebooks, illustrations, and supporting media.
+- `CNAME`: custom domain configuration.
+- `.htaccess`: optional hosting configuration.
+- `homepage-module-snippet.html`: optional link card for the instructor's main website.
+- `add_xor_to_page.py` and `index.html.before-xor`: historical development artifacts, not the current homepage.
 
-       aimtx.rajan-prasad.com.np/
+## Deployment and verification
 
-3. Upload the CONTENTS of this package into that document root. The final structure
-   should look like:
+Deploy the root `index.html` with the `assets/` directory, preserving relative paths. The live address is https://aimtx.rajan-prasad.com.np/.
 
-       document-root/
-       ├── index.html
-       ├── OR_Gate_Manual_Backpropagation.ipynb
-       ├── .htaccess
-       └── assets/
-           ├── single_neuron_and_backpropagation.png
-           └── forward_and_backpropagation_overview.png
+After deployment, verify the lesson order (01–06), expand/collapse navigation, OR/XOR training controls, CNN illustrations, ANFIS plot and slider, lecture resource links, and mobile layout.
 
-4. Enable SSL/HTTPS for the subdomain.
+Direct ANFIS link: https://aimtx.rajan-prasad.com.np/#anfis-interactive
 
-5. Confirm that this address opens:
+## Implementation notes
 
-       https://aimtx.rajan-prasad.com.np/
+The website is static HTML, CSS, and JavaScript. MathJax is loaded from a CDN for equation typesetting. The ANFIS numerical example fixes two Gaussian premise functions and calculates the four first-order Sugeno consequent coefficients using least squares; it does not train premise parameters in the browser.
 
-## DNS choices
+## Instructor
 
-Use whichever option your hosting provider recommends:
-
-- `A` record: point `aimtx` to the hosting server's IP address.
-- `CNAME` record: point `aimtx` to the hostname supplied by the hosting platform.
-
-Do not write the URL as `aimtx.https://rajan-prasad.com.np/`.
-The correct format is:
-
-    https://aimtx.rajan-prasad.com.np/
-
-## Main-site module
-
-Copy `homepage-module-snippet.html` into the main website homepage where you want
-the teaching-resource card to appear. It already links to the subdomain.
-
-## Notebook link
-
-The page downloads the notebook from the same subdomain:
-
-    https://aimtx.rajan-prasad.com.np/OR_Gate_Manual_Backpropagation.ipynb
-
-## Optional direct Google Colab link
-
-After placing the notebook in a public GitHub repository, use:
-
-    https://colab.research.google.com/github/USERNAME/REPOSITORY/blob/main/OR_Gate_Manual_Backpropagation.ipynb
-
-MathJax is loaded from a CDN, so internet access is required for equation rendering.
+For the instructor's current professional profile and contact information, visit **https://rajan-prasad.com.np/**. Contact details are intentionally not duplicated in this repository.
