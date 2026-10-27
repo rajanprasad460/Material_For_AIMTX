@@ -4897,8 +4897,28 @@ function graph(id,series,lo,hi){let c=document.getElementById(id),ctx=c.getConte
  ctx.stroke();ctx.fillStyle=curve.color;ctx.fillText(curve.name,right-120,top+19+k*23);
  });
 })();
-graph('outplot',[{fn:pred,color:'#2864d8'}],1,6);
-function update(){let x=+document.getElementById('inputx').value,r=calc(x),f1=theta[0]*x+theta[1],f2=theta[2]*x+theta[3];document.getElementById('xvalue').textContent=x.toFixed(2);document.getElementById('a1w').textContent=fmt(r.u);document.getElementById('a2w').textContent=fmt(r.v);document.getElementById('a1bar').style.width=(100*r.u)+'%';document.getElementById('a2bar').style.width=(100*r.v)+'%';document.getElementById('local').textContent='f₁='+fmt(f1)+' · f₂='+fmt(f2);document.getElementById('prediction').textContent=fmt(pred(x));}
+function drawAnfisResponse(currentX){
+ const canvas=document.getElementById('outplot'),ctx=canvas.getContext('2d');
+ const w=canvas.width,h=canvas.height,L=60,R=w-20,T=30,B=h-48;
+ const f1=x=>theta[0]*x+theta[1],f2=x=>theta[2]*x+theta[3];
+ const values=[];for(let i=0;i<=250;i++){let x=2*i/250;values.push(f1(x),f2(x),pred(x));}
+ const ymin=Math.floor(Math.min(...values)-.5),ymax=Math.ceil(Math.max(...values)+.5);
+ const px=x=>L+(x/2)*(R-L),py=y=>B-(y-ymin)/(ymax-ymin)*(B-T);
+ ctx.clearRect(0,0,w,h);ctx.font='14px system-ui';ctx.textBaseline='middle';
+ ctx.strokeStyle='#d3dce9';ctx.fillStyle='#52657e';ctx.lineWidth=1;
+ for(let i=0;i<=5;i++){let x=2*i/5,xx=px(x);ctx.beginPath();ctx.moveTo(xx,T);ctx.lineTo(xx,B);ctx.stroke();ctx.fillText(x.toFixed(1),xx-12,B+17);}
+ for(let i=0;i<=5;i++){let y=ymin+(ymax-ymin)*i/5,yy=py(y);ctx.beginPath();ctx.moveTo(L,yy);ctx.lineTo(R,yy);ctx.stroke();ctx.fillText(y.toFixed(1),9,yy);}
+ ctx.strokeStyle='#40516b';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(L,T);ctx.lineTo(L,B);ctx.lineTo(R,B);ctx.stroke();
+ ctx.fillStyle='#253e63';ctx.fillText('Predicted output y',L,T-17);ctx.fillText('Input x',R-52,h-12);
+ const curves=[{fn:f1,color:'#d17a24',label:'Rule 1: f₁'},{fn:f2,color:'#8656c7',label:'Rule 2: f₂'},{fn:pred,color:'#0a936e',label:'ANFIS output'}];
+ curves.forEach((curve,k)=>{ctx.strokeStyle=curve.color;ctx.lineWidth=k===2?4:2;ctx.setLineDash(k===2?[]:[7,5]);ctx.beginPath();for(let i=0;i<=350;i++){let x=2*i/350;if(i===0)ctx.moveTo(px(x),py(curve.fn(x)));else ctx.lineTo(px(x),py(curve.fn(x)));}ctx.stroke();ctx.setLineDash([]);ctx.fillStyle=curve.color;ctx.fillRect(L+k*205,T+5,17,4);ctx.fillText(curve.label,L+23+k*205,T+8);});
+ const x=Number(currentX),y=pred(x),xx=px(x),yy=py(y);
+ ctx.setLineDash([4,5]);ctx.strokeStyle='#64748b';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(xx,B);ctx.lineTo(xx,yy);ctx.lineTo(L,yy);ctx.stroke();ctx.setLineDash([]);
+ ctx.fillStyle='#e64b45';ctx.beginPath();ctx.arc(xx,yy,7,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.stroke();
+ ctx.fillStyle='#24334a';ctx.font='bold 14px system-ui';ctx.fillText('('+x.toFixed(2)+', '+y.toFixed(3)+')',Math.min(xx+13,R-135),Math.max(T+40,yy-13));
+}
+
+function update(){let x=+document.getElementById('inputx').value,r=calc(x),f1=theta[0]*x+theta[1],f2=theta[2]*x+theta[3];document.getElementById('xvalue').textContent=x.toFixed(2);document.getElementById('a1w').textContent=fmt(r.u);document.getElementById('a2w').textContent=fmt(r.v);document.getElementById('a1bar').style.width=(100*r.u)+'%';document.getElementById('a2bar').style.width=(100*r.v)+'%';document.getElementById('local').textContent='f₁='+fmt(f1)+' · f₂='+fmt(f2);document.getElementById('prediction').textContent=fmt(pred(x));drawAnfisResponse(x);}
 document.getElementById('inputx').addEventListener('input',update);update();
 
 </script>
