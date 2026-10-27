@@ -1780,7 +1780,30 @@
       }
     }
 
-  </style>
+  
+
+/* AIMTX collapsible lesson layout: preserves existing lesson DOM and scripts */
+.aimtx-accordion{margin:22px 0;border:1px solid #d9e2f2;border-radius:18px;background:#fff;box-shadow:0 10px 26px rgba(30,60,110,.07);overflow:hidden}
+.aimtx-accordion>summary{display:flex;align-items:center;gap:15px;padding:18px 22px;cursor:pointer;list-style:none;background:linear-gradient(115deg,#f2f6ff,#fff);border-bottom:1px solid transparent}
+.aimtx-accordion>summary::-webkit-details-marker{display:none}
+.aimtx-accordion[open]>summary{border-bottom-color:#d9e2f2;background:#eaf1ff}
+.aimtx-accordion>summary:focus-visible{outline:3px solid #2457d6;outline-offset:-3px}
+.aimtx-accordion-number{font-size:.8rem;font-weight:800;color:#2457d6;background:#dce9ff;border-radius:10px;padding:9px 11px;min-width:45px;text-align:center}
+.aimtx-accordion-heading{flex:1;min-width:0}
+.aimtx-accordion-heading strong{display:block;font-size:1.1rem;line-height:1.3;color:#1b3258}
+.aimtx-accordion-heading small{display:block;color:#63758d;font-size:.83rem;margin-top:3px}
+.aimtx-accordion-chevron{font-size:1.35rem;color:#2457d6;transition:transform .2s}
+.aimtx-accordion[open] .aimtx-accordion-chevron{transform:rotate(180deg)}
+.aimtx-accordion-content{padding:8px 14px 22px;min-width:0}
+.aimtx-accordion-content>.hero{margin-top:0}
+.aimtx-accordion-content .container{max-width:100%}
+.aimtx-accordion-content .anfis-module{margin:0}
+.aimtx-accordion-content .anfis-module .wrap{padding:12px 8px 30px}
+.aimtx-accordion-content .anfis-module header{border-radius:14px}
+.course-sidebar{position:sticky;top:90px;align-self:start}
+@media(max-width:700px){.aimtx-accordion>summary{padding:13px 12px;gap:9px}.aimtx-accordion-heading strong{font-size:.97rem}.aimtx-accordion-content{padding:4px 8px 15px}.course-sidebar{position:static}}
+
+</style>
 </head>
 
 <body>
@@ -4920,6 +4943,81 @@ function drawAnfisResponse(currentX){
 
 function update(){let x=+document.getElementById('inputx').value,r=calc(x),f1=theta[0]*x+theta[1],f2=theta[2]*x+theta[3];document.getElementById('xvalue').textContent=x.toFixed(2);document.getElementById('a1w').textContent=fmt(r.u);document.getElementById('a2w').textContent=fmt(r.v);document.getElementById('a1bar').style.width=(100*r.u)+'%';document.getElementById('a2bar').style.width=(100*r.v)+'%';document.getElementById('local').textContent='f₁='+fmt(f1)+' · f₂='+fmt(f2);document.getElementById('prediction').textContent=fmt(pred(x));drawAnfisResponse(x);}
 document.getElementById('inputx').addEventListener('input',update);update();
+
+</script>
+<script>
+
+/* Progressive enhancement: collapse existing lesson content without rewriting it. */
+(function initAimtxAccordions(){
+ const units=[
+  ['or-gate','01','Artificial Neural Networks','Single neuron · OR gate'],
+  ['xor-gate','02','Multilayer Neural Networks','XOR gate · Backpropagation'],
+  ['cnn-gate','03','Convolutional Neural Networks','CNN fundamentals'],
+  ['tl-gate','04','Transfer Learning','Bearing defect classification'],
+  ['rnn-gate','05','Recurrent Neural Networks','Sequence memory'],
+  ['anfis-interactive','06','Fuzzy Logic & ANFIS','Gaussian membership functions · Sugeno learning']
+ ];
+ const accordionMap=new Map();
+ const stream=document.querySelector('.lesson-stream');
+ if(!stream)return;
+ function makeDetails(unit){
+  const [id,num,title,desc]=unit;
+  const details=document.createElement('details');
+  details.className='aimtx-accordion';
+  details.dataset.lesson=id;
+  const summary=document.createElement('summary');
+  summary.innerHTML='<span class="aimtx-accordion-number">'+num+'</span><span class="aimtx-accordion-heading"><strong>'+title+'</strong><small>'+desc+'</small></span><span class="aimtx-accordion-chevron" aria-hidden="true">⌄</span>';
+  const content=document.createElement('div');
+  content.className='aimtx-accordion-content';
+  details.append(summary,content);
+  details.addEventListener('toggle',()=>{
+   if(!details.open)return;
+   accordionMap.forEach((other,key)=>{if(key!==id&&other.open)other.open=false;});
+   if(window.MathJax?.typesetPromise)window.MathJax.typesetPromise([content]).catch(()=>{});
+  });
+  accordionMap.set(id,details);
+  return {details,content};
+ }
+ for(let i=0;i<5;i++){
+  const unit=units[i],marker=document.getElementById(unit[0]);
+  if(!marker||marker.parentElement!==stream){console.warn('AIMTX lesson wrapper skipped:',unit[0]);continue;}
+  const nextId=i<4?units[i+1][0]:null;
+  const {details,content}=makeDetails(unit);
+  marker.before(details);
+  let node=marker;
+  while(node){
+   if(node.nodeType===1&&node.id===nextId)break;
+   const next=node.nextSibling;
+   content.appendChild(node);
+   node=next;
+  }
+ }
+ const anfis=document.getElementById('anfis-interactive');
+ if(anfis){
+  const {details,content}=makeDetails(units[5]);
+  anfis.before(details);
+  content.appendChild(anfis);
+ }
+ function reveal(id,scroll){
+  const details=accordionMap.get(id);
+  if(!details)return;
+  details.open=true;
+  if(scroll)requestAnimationFrame(()=>details.scrollIntoView({behavior:'smooth',block:'start'}));
+ }
+ document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',()=>{
+   const target=a.getAttribute('href').slice(1);
+   if(accordionMap.has(target))reveal(target,false);
+  });
+ });
+ const hash=decodeURIComponent(location.hash.slice(1));
+ if(accordionMap.has(hash))reveal(hash,true);
+ else reveal('or-gate',false);
+ window.addEventListener('hashchange',()=>{
+  const id=decodeURIComponent(location.hash.slice(1));
+  if(accordionMap.has(id))reveal(id,true);
+ });
+})();
 
 </script>
 </body>
