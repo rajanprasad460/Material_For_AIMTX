@@ -4879,7 +4879,24 @@ document.querySelector('#f1').textContent='f₁ = '+fmt(theta[0])+'x '+(theta[1]
 document.querySelector('#f2').textContent='f₂ = '+fmt(theta[2])+'x '+(theta[3]<0?'− ':'+ ')+fmt(Math.abs(theta[3]));
 document.querySelector('#verify').innerHTML=rows.map(r=>'<tr><td>'+r.x+'</td><td>'+r.y+'</td><td>'+fmt(pred(r.x))+'</td><td>'+fmt(r.y-pred(r.x))+'</td></tr>').join('');
 function graph(id,series,lo,hi){let c=document.getElementById(id),ctx=c.getContext('2d'),w=c.width,h=c.height;ctx.clearRect(0,0,w,h);ctx.strokeStyle='#bdc9df';ctx.lineWidth=1;for(let i=0;i<5;i++){let yy=20+(h-45)*i/4;ctx.beginPath();ctx.moveTo(40,yy);ctx.lineTo(w-15,yy);ctx.stroke();}series.forEach(({fn,color})=>{ctx.strokeStyle=color;ctx.lineWidth=3;ctx.beginPath();for(let i=0;i<=300;i++){let x=2*i/300,y=fn(x),px=40+(w-60)*i/300,py=20+(hi-y)/(hi-lo)*(h-45);if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);}ctx.stroke();});}
-graph('mf',[{fn:x=>mf(x,0),color:'#2864d8'},{fn:x=>mf(x,2),color:'#9155c9'}],0,1);
+// Draw complete Gaussian curves over x = -3 to 5 (centres 0 and 2, sigma = 1).
+(function drawFullGaussianCurves(){
+ const c=document.getElementById('mf'),ctx=c.getContext('2d');
+ const w=c.width,h=c.height,left=54,right=w-18,top=18,bottom=h-38;
+ const xmin=-3,xmax=5,ymin=0,ymax=1.05;
+ const xp=x=>left+(x-xmin)/(xmax-xmin)*(right-left);
+ const yp=y=>bottom-(y-ymin)/(ymax-ymin)*(bottom-top);
+ ctx.clearRect(0,0,w,h);ctx.font='14px system-ui';ctx.lineWidth=1;
+ ctx.strokeStyle='#cbd5e1';ctx.fillStyle='#52657e';
+ for(let y=0;y<=1.0001;y+=.25){let py=yp(y);ctx.beginPath();ctx.moveTo(left,py);ctx.lineTo(right,py);ctx.stroke();ctx.fillText(y.toFixed(2),8,py+5);}
+ for(let x=-3;x<=5;x++){let px=xp(x);ctx.beginPath();ctx.moveTo(px,top);ctx.lineTo(px,bottom);ctx.stroke();ctx.fillText(String(x),px-5,bottom+20);}
+ ctx.fillText('Membership degree',left,13);ctx.fillText('Input x',right-42,h-8);
+ [{c:0,color:'#2864d8',name:'A₁ (c=0)'},{c:2,color:'#9155c9',name:'A₂ (c=2)'}].forEach((curve,k)=>{
+ ctx.strokeStyle=curve.color;ctx.lineWidth=3;ctx.beginPath();
+ for(let i=0;i<=500;i++){let x=xmin+(xmax-xmin)*i/500,px=xp(x),py=yp(mf(x,curve.c));if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);}
+ ctx.stroke();ctx.fillStyle=curve.color;ctx.fillText(curve.name,right-120,top+19+k*23);
+ });
+})();
 graph('outplot',[{fn:pred,color:'#2864d8'}],1,6);
 function update(){let x=+document.getElementById('inputx').value,r=calc(x),f1=theta[0]*x+theta[1],f2=theta[2]*x+theta[3];document.getElementById('xvalue').textContent=x.toFixed(2);document.getElementById('a1w').textContent=fmt(r.u);document.getElementById('a2w').textContent=fmt(r.v);document.getElementById('a1bar').style.width=(100*r.u)+'%';document.getElementById('a2bar').style.width=(100*r.v)+'%';document.getElementById('local').textContent='f₁='+fmt(f1)+' · f₂='+fmt(f2);document.getElementById('prediction').textContent=fmt(pred(x));}
 document.getElementById('inputx').addEventListener('input',update);update();
